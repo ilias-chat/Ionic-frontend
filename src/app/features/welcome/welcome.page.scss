@@ -1,0 +1,26 @@
+.fl-welcome {
+  --background: var(--fl-background);
+}
+
+.fl-glass-card {
+  margin-top: 2rem;
+  border-radius: var(--fl-radius-xl);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(23, 31, 51, 0.92);
+  backdrop-filter: blur(12px);
+}
+
+.fl-mode-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.fl-list ion-item {
+  --background: transparent;
+}
+
+.fl-error {
+  display: block;
+  margin: 0.5rem 0;
+}

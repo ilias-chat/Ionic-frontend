@@ -1,0 +1,23 @@
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="discovery" href="/tabs/discovery">
+      <ion-icon name="football-outline"></ion-icon>
+      <ion-label>Discover</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="map" href="/tabs/map">
+      <ion-icon name="compass-outline"></ion-icon>
+      <ion-label>Map</ion-label>
+    </ion-tab-button>
+    <ion-tab-button tab="profile" href="/tabs/profile">
+      <ion-icon name="person-circle-outline"></ion-icon>
+      <ion-label>Profile</ion-label>
+    </ion-tab-button>
+    @if (showAdminTab()) {
+      <ion-tab-button tab="admin" href="/tabs/admin">
+        <ion-icon name="shield-checkmark-outline"></ion-icon>
+        <ion-label>Admin</ion-label>
+      </ion-tab-button>
+    }
+  </ion-tab-bar>
+  <ion-router-outlet></ion-router-outlet>
+</ion-tabs>

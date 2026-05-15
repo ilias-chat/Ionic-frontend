@@ -1,0 +1,76 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Discover</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding discovery">
+  <ion-refresher slot="fixed" (ionRefresh)="onRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-segment [value]="searchScope()" (ionChange)="onScopeChange($event)">
+    <ion-segment-button value="team">
+      <ion-label>Team</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="player">
+      <ion-label>Player name</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-searchbar
+    class="ion-margin-top"
+    [placeholder]="searchScope() === 'team' ? 'Search by team name' : 'Search by player name'"
+    [debounce]="450"
+    (ionChange)="onSearchChange($event)"
+  ></ion-searchbar>
+
+  <div class="chips-row ion-margin-top">
+    @for (pos of positions; track pos) {
+      <ion-chip [color]="selectedPosition() === pos ? 'primary' : 'medium'" (click)="togglePosition(pos)">
+        <ion-label>{{ pos }}</ion-label>
+      </ion-chip>
+    }
+  </div>
+
+  @if (searchScope() === 'player' && !searchText().trim()) {
+    <p class="hint ion-text-center ion-margin-top">Enter a name to search players.</p>
+  }
+
+  @if (initialLoading()) {
+    @for (i of [1, 2, 3, 4, 5]; track i) {
+      <ion-card class="fl-player-card">
+        <ion-card-header>
+          <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </ion-card-header>
+      </ion-card>
+    }
+  } @else if (!players().length) {
+    <div class="empty ion-text-center ion-padding">
+      <p>No players match your filters.</p>
+    </div>
+  } @else {
+    @for (p of players(); track p._id) {
+      <ion-card class="fl-player-card" [routerLink]="['/player', p._id]">
+        <ion-card-header>
+          <ion-card-title>{{ p.name }}</ion-card-title>
+          <ion-card-subtitle>{{ p.team }}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-header>
+          <ion-badge color="tertiary">{{ p.venueName || 'Stadium TBC' }}</ion-badge>
+          @if (p.position) {
+            <ion-chip outline="true" class="ion-margin-start">
+              <ion-icon name="person-outline"></ion-icon>
+              <ion-label>{{ p.position }}</ion-label>
+            </ion-chip>
+          }
+        </ion-card-header>
+      </ion-card>
+    }
+  }
+
+  <ion-infinite-scroll threshold="120px" [disabled]="!hasMore() || initialLoading()" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content loadingText="Loading more..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

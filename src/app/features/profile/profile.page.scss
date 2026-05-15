@@ -1,0 +1,13 @@
+.profile {
+  --background: var(--fl-background);
+}
+
+.fl-glass-card {
+  border-radius: var(--fl-radius-lg);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(23, 31, 51, 0.9);
+}
+
+ion-item {
+  --background: transparent;
+}

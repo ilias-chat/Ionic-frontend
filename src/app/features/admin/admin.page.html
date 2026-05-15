@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Admin import</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding admin">
+  <ion-card class="fl-glass-card">
+    <ion-card-header>
+      <ion-card-title>API-Football squad import</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-input label="League ID" labelPlacement="stacked" type="number" [(ngModel)]="leagueIdStr"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input label="Team ID" labelPlacement="stacked" type="number" [(ngModel)]="teamIdStr"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input label="Season (year)" labelPlacement="stacked" type="number" [(ngModel)]="seasonStr"></ion-input>
+      </ion-item>
+      <ion-button expand="block" class="ion-margin-top" [disabled]="busy()" (click)="submit()">Run import</ion-button>
+      <ion-note class="ion-margin-top" color="medium">Requires an account with admin role on the API.</ion-note>
+      @if (lastResult(); as r) {
+        <pre class="result ion-margin-top">{{ r | json }}</pre>
+      }
+    </ion-card-content>
+  </ion-card>
+</ion-content>

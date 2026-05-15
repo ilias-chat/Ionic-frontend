@@ -1,0 +1,20 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Map</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="recenter()">Reset</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content scroll-y="false" class="map-page">
+  @if (loading()) {
+    <div class="map-overlay">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+  }
+  @if (error()) {
+    <p class="ion-padding map-error">{{ error() }}</p>
+  }
+  <div #mapHost class="leaflet-host"></div>
+</ion-content>

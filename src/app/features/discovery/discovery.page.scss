@@ -1,0 +1,21 @@
+.discovery {
+  --background: var(--fl-background);
+}
+
+.chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.fl-player-card {
+  border-radius: var(--fl-radius-lg);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(23, 31, 51, 0.85);
+  margin-top: 0.75rem;
+}
+
+.hint,
+.empty {
+  color: var(--fl-on-surface-variant);
+}

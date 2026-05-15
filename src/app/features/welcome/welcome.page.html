@@ -1,0 +1,43 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>FootyLocal</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding fl-welcome">
+  <ion-card class="fl-glass-card">
+    <ion-card-header>
+      <ion-card-title>Welcome</ion-card-title>
+      <ion-card-subtitle>Discover players, stadiums, and local ratings</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="fl-mode-toggle">
+        <ion-button size="small" [fill]="mode === 'signin' ? 'solid' : 'outline'" (click)="setMode('signin')">Sign in</ion-button>
+        <ion-button size="small" [fill]="mode === 'signup' ? 'solid' : 'outline'" (click)="setMode('signup')">Sign up</ion-button>
+      </div>
+
+      <ion-list lines="none" class="fl-list">
+        @if (mode === 'signup') {
+          <ion-item>
+            <ion-input label="Display name" labelPlacement="stacked" [(ngModel)]="displayName" autocomplete="name"></ion-input>
+          </ion-item>
+        }
+        <ion-item>
+          <ion-input type="email" label="Email" labelPlacement="stacked" [(ngModel)]="email" autocomplete="email"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input type="password" label="Password" labelPlacement="stacked" [(ngModel)]="password" autocomplete="current-password"></ion-input>
+        </ion-item>
+      </ion-list>
+
+      @if (errorMessage) {
+        <ion-note color="danger" class="fl-error">{{ errorMessage }}</ion-note>
+      }
+
+      <ion-button expand="block" class="ion-margin-top" [disabled]="busy || !email || !password" (click)="submit()">
+        {{ mode === 'signup' ? 'Create account' : 'Sign in' }}
+      </ion-button>
+      <ion-button expand="block" fill="outline" color="secondary" [disabled]="busy" (click)="guest()">Continue as guest</ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

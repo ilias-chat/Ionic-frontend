@@ -1,2 +1,63 @@
-// For information on how to create your own theme, please refer to:
-// https://ionicframework.com/docs/theming/
+/* FootyLocal — Pitch Dark tokens (from design system) */
+:root {
+  --fl-background: #0b1326;
+  --fl-surface: #0b1326;
+  --fl-surface-container: #171f33;
+  --fl-surface-container-high: #222a3d;
+  --fl-on-surface: #dae2fd;
+  --fl-on-surface-variant: #bccbb9;
+  --fl-primary: #4be277;
+  --fl-on-primary: #003915;
+  --fl-primary-container: #22c55e;
+  --fl-secondary: #ffca45;
+  --fl-tertiary: #7cd0ff;
+  --fl-outline: #869585;
+  --fl-radius-lg: 1rem;
+  --fl-radius-xl: 1.5rem;
+}
+
+/* Ionic color maps */
+:root {
+  --ion-color-primary: #4be277;
+  --ion-color-primary-rgb: 75, 226, 119;
+  --ion-color-primary-contrast: #003915;
+  --ion-color-primary-contrast-rgb: 0, 57, 21;
+  --ion-color-primary-shade: #42c769;
+  --ion-color-primary-tint: #5de585;
+
+  --ion-color-secondary: #ffca45;
+  --ion-color-secondary-rgb: 255, 202, 69;
+  --ion-color-secondary-contrast: #3f2e00;
+  --ion-color-secondary-contrast-rgb: 63, 46, 0;
+  --ion-color-secondary-shade: #e0b23d;
+  --ion-color-secondary-tint: #ffcf58;
+
+  --ion-color-tertiary: #7cd0ff;
+  --ion-color-tertiary-rgb: 124, 208, 255;
+  --ion-color-tertiary-contrast: #00354a;
+  --ion-color-tertiary-contrast-rgb: 0, 53, 74;
+  --ion-color-tertiary-shade: #6db7e0;
+  --ion-color-tertiary-tint: #89d5ff;
+
+  --ion-background-color: #0b1326;
+  --ion-background-color-rgb: 11, 19, 38;
+
+  --ion-text-color: #dae2fd;
+  --ion-text-color-rgb: 218, 226, 253;
+
+  --ion-toolbar-background: #131b2e;
+  --ion-item-background: transparent;
+  --ion-card-background: rgba(23, 31, 51, 0.92);
+
+  --ion-tab-bar-background: #131b2e;
+  --ion-tab-bar-border-color: rgba(255, 255, 255, 0.06);
+}
+
+.ion-palette-dark .ion-color-medium {
+  --ion-color-base: #2d3449 !important;
+  --ion-color-contrast: #dae2fd !important;
+}
+
+html {
+  --ion-font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}

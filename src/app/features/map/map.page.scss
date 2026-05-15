@@ -1,0 +1,28 @@
+.map-page {
+  --background: var(--fl-background);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.leaflet-host {
+  flex: 1;
+  width: 100%;
+  min-height: 280px;
+}
+
+.map-overlay {
+  position: absolute;
+  z-index: 1000;
+  inset-inline: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  padding-top: 0.5rem;
+  pointer-events: none;
+}
+
+.map-error {
+  color: var(--ion-color-danger);
+  margin: 0;
+}

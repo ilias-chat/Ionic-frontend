@@ -1,16 +1,14 @@
-// This file can be replaced during build by using the `fileReplacements` array.
-// `ng build` replaces `environment.ts` with `environment.prod.ts`.
-// The list of file replacements can be found in `angular.json`.
-
 export const environment = {
-  production: false
+  production: false,
+  /** Base URL of TRWM-backend (no trailing slash). Example: http://localhost:3000 */
+  apiBaseUrl: 'https://ic844-node-backend-367467645438.europe-west1.run.apptp://localhost:3000',
+  firebase:{
+    apiKey: "AIzaSyA_AoaaVgqPiNh4Bt8tR7dKPLTD8ThQt1g",
+    authDomain: "ic844-football-app.firebaseapp.com",
+    projectId: "ic844-football-app",
+    storageBucket: "ic844-football-app.firebasestorage.app",
+    messagingSenderId: "693733784260",
+    appId: "1:693733784260:web:9ea483a1d315e4cd112791",
+    measurementId: "G-BY8S2Y4S19"
+  }
 };
-
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

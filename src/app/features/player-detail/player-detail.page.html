@@ -1,0 +1,103 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/discovery"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Player</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding detail">
+  @if (loading()) {
+    <ion-card>
+      <ion-card-header>
+        <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 35%"></ion-skeleton-text>
+      </ion-card-header>
+    </ion-card>
+  } @else if (player()) {
+    @let p = player()!;
+    <ion-card class="fl-glass-card">
+      <ion-card-header>
+        <ion-card-title>{{ p.name }}</ion-card-title>
+        <ion-label class="muted">{{ p.team }} · {{ p.league }}</ion-label>
+      </ion-card-header>
+      <ion-card-content>
+        @if (p.position) {
+          <ion-chip color="primary">{{ p.position }}</ion-chip>
+        }
+        @if (p.venueName) {
+          <ion-chip color="tertiary">{{ p.venueName }}</ion-chip>
+        }
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="fl-glass-card ion-margin-top">
+      <ion-card-header>
+        <ion-card-title>Stats</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        @if (!statsEntries.length) {
+          <ion-note>No stats stored for this player.</ion-note>
+        } @else {
+          <ion-list lines="full">
+            @for (row of statsEntries; track row[0]) {
+              <ion-item>
+                <ion-label>{{ row[0] }}</ion-label>
+                <ion-note slot="end">{{ row[1] }}</ion-note>
+              </ion-item>
+            }
+          </ion-list>
+        }
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="fl-glass-card ion-margin-top">
+      <ion-card-header>
+        <ion-card-title>Comments</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        @if (!comments().length) {
+          <p class="muted">No comments yet.</p>
+        }
+        @for (c of comments(); track $index) {
+          <div class="comment-block">
+            <div class="comment-meta">
+              <span class="mono">{{ (c.author | slice:0:8) + '…' }}</span>
+              <ion-chip size="small" color="secondary">{{ c.rating }}★</ion-chip>
+            </div>
+            <p>{{ c.text }}</p>
+          </div>
+        }
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="fl-glass-card ion-margin-top">
+      <ion-card-header>
+        <ion-card-title>Your rating & comment</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        @if (!canComment()) {
+          <ion-note>Sign in (not as guest) to leave a rating and comment.</ion-note>
+        } @else {
+          <ion-label>Rating (1–5)</ion-label>
+          <ion-range min="1" max="5" step="1" snaps="true" ticks="true" [ngModel]="rating()" (ngModelChange)="rating.set($event)"></ion-range>
+          <ion-item lines="none" class="ion-no-padding">
+            <ion-input
+              label="Comment"
+              labelPlacement="stacked"
+              [ngModel]="commentText()"
+              (ngModelChange)="commentText.set($event)"
+              placeholder="Share your take…"
+            ></ion-input>
+          </ion-item>
+          <ion-button expand="block" class="ion-margin-top" [disabled]="posting() || !commentText().trim()" (click)="submitComment()">
+            Post with location
+          </ion-button>
+        }
+      </ion-card-content>
+    </ion-card>
+  } @else {
+    <p>Player not found.</p>
+  }
+</ion-content>
