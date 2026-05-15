@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #0b1326;
+            color: #dae2fd;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .map-gradient-overlay {
+            background: radial-gradient(circle at center, transparent 0%, rgba(11, 19, 38, 0.4) 70%, rgba(11, 19, 38, 0.8) 100%);
+        }
+        .pitch-line {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-container": "#004b1e",
+                    "surface-container": "#171f33",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary-fixed-variant": "#004c69",
+                    "inverse-surface": "#dae2fd",
+                    "primary": "#4be277",
+                    "outline-variant": "#3d4a3d",
+                    "error": "#ffb4ab",
+                    "on-primary-fixed-variant": "#005321",
+                    "on-secondary-fixed-variant": "#5a4300",
+                    "on-error": "#690005",
+                    "surface": "#0b1326",
+                    "secondary-container": "#e4ae00",
+                    "primary-container": "#22c55e",
+                    "surface-container-highest": "#2d3449",
+                    "secondary-fixed-dim": "#f7be1d",
+                    "surface-bright": "#31394d",
+                    "on-secondary-container": "#5b4400",
+                    "on-primary": "#003915",
+                    "secondary": "#ffca45",
+                    "surface-variant": "#2d3449",
+                    "on-secondary-fixed": "#251a00",
+                    "secondary-fixed": "#ffdf9a",
+                    "on-surface": "#dae2fd",
+                    "on-tertiary": "#00354a",
+                    "on-tertiary-fixed": "#001e2c",
+                    "inverse-on-surface": "#283044",
+                    "on-background": "#dae2fd",
+                    "tertiary-container": "#2eb7f2",
+                    "primary-fixed-dim": "#4ae176",
+                    "outline": "#869585",
+                    "surface-container-low": "#131b2e",
+                    "on-surface-variant": "#bccbb9",
+                    "on-primary-fixed": "#002109",
+                    "tertiary": "#7cd0ff",
+                    "tertiary-fixed-dim": "#7bd0ff",
+                    "surface-tint": "#4ae176",
+                    "surface-container-lowest": "#060e20",
+                    "error-container": "#93000a",
+                    "surface-dim": "#0b1326",
+                    "tertiary-fixed": "#c4e7ff",
+                    "inverse-primary": "#006e2f",
+                    "background": "#0b1326",
+                    "on-secondary": "#3f2e00",
+                    "surface-container-high": "#222a3d",
+                    "primary-fixed": "#6bff8f",
+                    "on-tertiary-container": "#00455f"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-padding": "1.25rem",
+                    "stack-md": "1rem",
+                    "stack-lg": "2rem",
+                    "unit": "4px",
+                    "gutter": "1rem",
+                    "stack-sm": "0.5rem"
+            },
+            "fontFamily": {
+                    "label-sm": ["JetBrains Mono"],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "title-lg": ["Inter"],
+                    "display-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-white/10 flex justify-between items-center h-16 px-container-padding">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="sports_soccer">sports_soccer</span>
+<h1 class="font-display-lg text-title-lg font-black tracking-tighter text-primary">FootyLocal</h1>
+</div>
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-white/5 transition-colors active:scale-95">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="search">search</span>
+</button>
+</header>
+<!-- Map Canvas Area -->
+<main class="flex-1 relative overflow-hidden bg-surface-container-lowest">
+<!-- The "Map" - Represented by a dark, pitch-themed stylistic background -->
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full bg-[#0b1326] relative overflow-hidden">
+<!-- Abstract Pitch Lines to reinforce football theme on map -->
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<div class="absolute top-1/2 left-0 w-full h-[1px] bg-white"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border border-white rounded-full"></div>
+</div>
+<img class="w-full h-full object-cover opacity-40 grayscale contrast-125" data-alt="A cinematic overhead aerial drone shot of a dark, rain-slicked city at night with glowing street grids and neon highlights. The atmosphere is atmospheric and professional with deep blues and blacks of the urban environment contrasted by electric green and gold light trails. This urban landscape serves as a sophisticated, high-contrast map background for a modern sports discovery application, maintaining a sleek corporate dark-mode aesthetic with visible textures and sharp details." data-location="London" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaPRChBghC3pIYIfSwPb2OSVS4y_OK3EhlZ1JL5ocqxXebPNDQBHA3iGbA1HgSRs9uIcQDTu9q_BjzzJuJARGiL0SDEhWrQ0Pz-xar6TRnACeOZ9cx1e2L8mzlLoF_DApRZGujsB0Ired0MSGAcUrIOWQjRMa2MY4Fg-jd5ok9nLFapAfwHIE4BMNnlpt5P98GrDcKf87P4ADAkPEWel_dFWXnqDPC9V_IqhsKOZs90tJwrpVKM1g67GV2vTdWUhWdocHsASD0ig"/>
+<div class="absolute inset-0 map-gradient-overlay"></div>
+</div>
+</div>
+<!-- Floating UI: Custom Map Pins -->
+<!-- Pin 1: Selection Active -->
+<div class="absolute top-[40%] left-[55%] z-10 -translate-x-1/2 -translate-y-1/2">
+<div class="flex flex-col items-center">
+<div class="bg-primary text-on-primary px-3 py-1 rounded-full text-label-sm font-label-sm mb-1 shadow-lg shadow-primary/20">
+                    Emirates Stadium
+                </div>
+<div class="relative">
+<div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center border-4 border-surface shadow-2xl scale-110">
+<span class="material-symbols-outlined text-on-primary" data-icon="stadium">stadium</span>
+</div>
+<div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-3 bg-primary rotate-45 border-r border-b border-surface"></div>
+</div>
+</div>
+</div>
+<!-- Pin 2: Secondary -->
+<div class="absolute top-[25%] left-[30%] z-10 -translate-x-1/2 -translate-y-1/2 opacity-70">
+<div class="flex flex-col items-center">
+<div class="relative group">
+<div class="w-10 h-10 bg-surface-container-highest rounded-full flex items-center justify-center border-2 border-white/20 transition-all hover:scale-110">
+<span class="material-symbols-outlined text-primary" data-icon="sports_soccer">sports_soccer</span>
+</div>
+<div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-surface-container-highest rotate-45 border-r border-b border-white/10"></div>
+</div>
+</div>
+</div>
+<!-- Pin 3: Secondary -->
+<div class="absolute top-[60%] left-[20%] z-10 -translate-x-1/2 -translate-y-1/2 opacity-70">
+<div class="flex flex-col items-center">
+<div class="relative">
+<div class="w-10 h-10 bg-surface-container-highest rounded-full flex items-center justify-center border-2 border-white/20">
+<span class="material-symbols-outlined text-secondary" data-icon="local_activity">local_activity</span>
+</div>
+<div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-surface-container-highest rotate-45 border-r border-b border-white/10"></div>
+</div>
+</div>
+</div>
+<!-- Recenter Button -->
+<button class="absolute bottom-40 right-6 z-20 w-14 h-14 bg-primary-container text-on-primary-container rounded-full shadow-[0_8px_24px_rgba(34,197,94,0.4)] flex items-center justify-center active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-3xl font-bold" data-icon="my_location">my_location</span>
+</button>
+<!-- Partially Visible Bottom Sheet -->
+<div class="absolute bottom-20 left-0 w-full z-30 transition-transform duration-500 transform translate-y-0">
+<div class="glass-panel rounded-t-[32px] px-container-padding pt-3 pb-8 shadow-[0_-12px_40px_rgba(0,0,0,0.6)]">
+<!-- Drag Handle -->
+<div class="w-12 h-1.5 bg-white/10 rounded-full mx-auto mb-6"></div>
+<div class="flex justify-between items-end mb-6">
+<div>
+<p class="text-primary font-label-sm text-label-sm uppercase tracking-widest mb-1">Live Matchday</p>
+<h2 class="font-headline-md text-headline-md text-on-surface">Emirates Stadium</h2>
+<p class="text-on-surface-variant font-body-md text-body-md flex items-center gap-1">
+<span class="material-symbols-outlined text-base" data-icon="location_on">location_on</span>
+                            Highbury, London • 0.8 miles away
+                        </p>
+</div>
+<div class="flex -space-x-3">
+<div class="w-10 h-10 rounded-full border-2 border-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close-up professional portrait of a confident male football player with a focused expression, set against a blurred stadium background with moody dramatic lighting. The image style is sleek and athletic, featuring deep shadows and highlights in electric green to match the FootyLocal brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxgwqOFG8N9ZXnIlWjUp9Ln1qcdtuOYqqJhszAqSa11ifYw5iTa_3tNMm5_1jUOKfHtISA7iutT9HnpvRWaLepripvVz9MQZPuLVDpofDFjhuZy1HY8kjSG9MblCDceKrRkeeV-4K9qA-V-zEorzIwHmokiElaLYCT2JVNNInD7jwphbCChuf29a_VKQ_uKCBE4jwDxCIS8ITo34098qJlUrjfAGr0aPQLYpscEhfI3DUsj9hcELF9ygU1OqSdESsE3VCo6Ju0_Q"/>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Professional portrait of a female soccer athlete in team gear, looking determined. The scene is illuminated by cool-toned cinematic floodlights in an urban night setting. The color palette emphasizes high-contrast dark blues and vibrant green accents, fitting a modern sports discovery app interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVkwOAFmj-GCBMfgICG3rdVihRwsAB9-tVZpaYxI7GhHo6Z4TphaHoHcZcS-6dFAwtcPq2lvgmOISYsaBOs2IVbDVycrhQbcwASB3R6whqNCP8YbgwUlWNzAgQ7Jw8q_QXuwJKIwNqfZM3riShqDy1j074mllgMqZ0i9Ennm8k-AQg6lSnIHPFU1hPu5clfZzP7RuUoODN_9JczExiNMSbYEqlQOamR92j27YMNiOkcRD4AfIjSx633H_BFicO8oTqJriBVL6Y-A"/>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-surface-container bg-surface-container-highest flex items-center justify-center text-label-sm font-label-sm text-primary">
+                            +14
+                        </div>
+</div>
+</div>
+<!-- Horizontal Scroll Player Cards -->
+<div class="flex gap-4 overflow-x-auto pb-4 -mx-container-padding px-container-padding scrollbar-hide">
+<!-- Player Card 1 -->
+<div class="min-w-[280px] bg-surface-container-high/40 rounded-2xl p-4 border border-white/5 flex gap-4 items-center backdrop-blur-sm">
+<div class="w-20 h-20 rounded-xl overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="A dynamic shot of a grassroots football player dribbling a soccer ball on a high-quality turf pitch at night under bright stadium lights. The focus is sharp on the player's athletic movement, with a background of blurred urban lights and a deep indigo sky. The lighting creates a high-energy, atmospheric mood with electric green highlights on the grass." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMhpD8kmYRS0ApaOyIWJPmKG9Z7h3P-ES8gbVkeB5JqNw1fTLh7ASyc9vIbOETDAQ5HQjnqAx-3tKeOG7l_bNjTgAMH-7xSVttVr8CLg_V58NW60hWntQdvkD5sya9heglzvgRa5f_rJJMGoIjuMPv4G7gni2drzNV7Lt961BYvusNhpJ6y7dWQIH2hPbNB3jNyQKN1tJKrGXt6MZ5kM0h_bu6wncK32XmzW7F9TuHI09u5o77nrI2a-dc3WrmsTNFxaecnvO_Lg"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-[10px] font-label-sm uppercase">Open Spot</span>
+<span class="text-secondary font-label-sm text-label-sm">£12.50</span>
+</div>
+<h3 class="font-title-lg text-title-lg text-on-surface mt-1">Evening 5-a-side</h3>
+<p class="text-on-surface-variant font-label-sm text-label-sm">19:00 - 20:00</p>
+</div>
+</div>
+<!-- Player Card 2 -->
+<div class="min-w-[280px] bg-surface-container-high/40 rounded-2xl p-4 border border-white/5 flex gap-4 items-center backdrop-blur-sm">
+<div class="w-20 h-20 rounded-xl overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="An atmospheric, low-angle shot of a pristine football field during twilight. The goalpost stands tall against a deep blue and purple sky, with crisp white lines marking the pitch. Electric green grass is illuminated by powerful corner floodlights, creating a professional and energetic sports environment suitable for a high-end mobile UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_Y_o6K05lziWckoTFozKlt_PlIPQAQnZaT73LY7yIyaAdEDmq7wLnijtkYuTbtIs0l90M3BY7WPuu6HaGYAUYXlJh6psbUBp156tH3KH6GNfD7i90sNpi6s5bapbyzu_pFmrZH9s2vEZsz2la0VjiFE-on7q9XaHLtX3CF2Qql-fUNaoqmXEFIfAl6mBeVLNfpstO7PtOnrQYLMyE1Qwhzrng5gH7JgJNy_FG7KVFFcAnt6KrwjesT33X12_XvOgAGw1QC5fETg"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<span class="bg-error/10 text-error px-2 py-0.5 rounded text-[10px] font-label-sm uppercase">Full</span>
+<span class="text-on-surface-variant font-label-sm text-label-sm">Invite Only</span>
+</div>
+<h3 class="font-title-lg text-title-lg text-on-surface mt-1">Pro League Drill</h3>
+<p class="text-on-surface-variant font-label-sm text-label-sm">20:30 - 22:00</p>
+</div>
+</div>
+</div>
+<button class="w-full py-4 bg-primary text-on-primary rounded-xl font-bold font-title-lg mt-4 active:scale-[0.98] transition-all">
+                    View Stadium Details
+                </button>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full h-20 flex justify-around items-center px-4 pb-safe bg-surface-container/90 backdrop-blur-md border-t border-white/5 shadow-[0_-4px_20px_rgba(0,0,0,0.4)] z-50 rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary/80" href="#">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+<span class="font-label-sm text-label-sm mt-1">Feed</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold bg-primary/10 rounded-xl px-4 py-1 scale-90 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="location_on" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<span class="font-label-sm text-label-sm mt-1">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary/80" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

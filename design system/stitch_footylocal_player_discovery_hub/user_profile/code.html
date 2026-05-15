@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-container": "#004b1e",
+                    "surface-container": "#171f33",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary-fixed-variant": "#004c69",
+                    "inverse-surface": "#dae2fd",
+                    "primary": "#4be277",
+                    "outline-variant": "#3d4a3d",
+                    "error": "#ffb4ab",
+                    "on-primary-fixed-variant": "#005321",
+                    "on-secondary-fixed-variant": "#5a4300",
+                    "on-error": "#690005",
+                    "surface": "#0b1326",
+                    "secondary-container": "#e4ae00",
+                    "primary-container": "#22c55e",
+                    "surface-container-highest": "#2d3449",
+                    "secondary-fixed-dim": "#f7be1d",
+                    "surface-bright": "#31394d",
+                    "on-secondary-container": "#5b4400",
+                    "on-primary": "#003915",
+                    "secondary": "#ffca45",
+                    "surface-variant": "#2d3449",
+                    "on-secondary-fixed": "#251a00",
+                    "secondary-fixed": "#ffdf9a",
+                    "on-surface": "#dae2fd",
+                    "on-tertiary": "#00354a",
+                    "on-tertiary-fixed": "#001e2c",
+                    "inverse-on-surface": "#283044",
+                    "on-background": "#dae2fd",
+                    "tertiary-container": "#2eb7f2",
+                    "primary-fixed-dim": "#4ae176",
+                    "outline": "#869585",
+                    "surface-container-low": "#131b2e",
+                    "on-surface-variant": "#bccbb9",
+                    "on-primary-fixed": "#002109",
+                    "tertiary": "#7cd0ff",
+                    "tertiary-fixed-dim": "#7bd0ff",
+                    "surface-tint": "#4ae176",
+                    "surface-container-lowest": "#060e20",
+                    "error-container": "#93000a",
+                    "surface-dim": "#0b1326",
+                    "tertiary-fixed": "#c4e7ff",
+                    "inverse-primary": "#006e2f",
+                    "background": "#0b1326",
+                    "on-secondary": "#3f2e00",
+                    "surface-container-high": "#222a3d",
+                    "primary-fixed": "#6bff8f",
+                    "on-tertiary-container": "#00455f"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-padding": "1.25rem",
+                    "stack-md": "1rem",
+                    "stack-lg": "2rem",
+                    "unit": "4px",
+                    "gutter": "1rem",
+                    "stack-sm": "0.5rem"
+            },
+            "fontFamily": {
+                    "label-sm": ["JetBrains Mono"],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "title-lg": ["Inter"],
+                    "display-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .pitch-gradient {
+            background: radial-gradient(circle at top right, #1e293b, #0f172a);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-white/10 flex justify-between items-center h-16 px-container-padding w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">sports_soccer</span>
+<h1 class="font-display-lg text-title-lg font-black tracking-tighter text-primary">My Profile</h1>
+</div>
+<button class="hover:bg-white/5 transition-colors p-2 rounded-full">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+</header>
+<main class="pt-24 px-container-padding max-w-2xl mx-auto space-y-8">
+<!-- User Info Section (Bento Style) -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="md:col-span-1 glass-card p-6 rounded-xl flex flex-col items-center justify-center text-center space-y-4">
+<div class="relative group">
+<img alt="User Profile" class="w-24 h-24 rounded-full object-cover border-2 border-primary shadow-lg shadow-primary/20" data-alt="A professional headshot of a young athlete in modern sportswear, captured in a high-contrast cinematic style. The lighting is moody and atmospheric, with deep slate backgrounds and a sharp emerald green rim light that matches the FootyLocal brand aesthetic. The expression is confident and focused, embodying an energetic and professional football player persona. The overall image has a sharp, high-definition digital finish with a subtle glassmorphism overlay effect." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoKBV3xzWChKM7KBy45mJv6cZz3Ni_R5CE8XyMvCPz765jYzhp893fl9Y6Cgc8JQqw8pqClrgfqesjT23QPnQK6bF1qMj0u2UXhUzFUoJ7fy23PrYYe4q-cd7IWAKGz1R4n0wrPrG06shXhqNPH3LXW6n-g1LpdrrIjYhJ9ipUiQZaIjcvc64l6epcvOOimNy4LL5cgfpcXmfIkYatAwMAgASZPI_DBRONmqePYa2MkRv65KW_UBifbWl9y9ZHq9caVLMiIPjpRQ"/>
+<div class="absolute bottom-0 right-0 bg-primary text-on-primary rounded-full p-1.5 shadow-lg">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</div>
+</div>
+<div>
+<h2 class="font-title-lg text-title-lg text-on-surface">Alex Rivera</h2>
+<p class="font-label-sm text-label-sm text-primary tracking-widest uppercase">Midfielder • London</p>
+</div>
+</div>
+<div class="md:col-span-2 glass-card p-6 rounded-xl flex flex-col justify-between space-y-6">
+<div class="space-y-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-tighter">Verified Account</span>
+<p class="font-title-lg text-title-lg text-on-surface">alex.rivera@footylocal.com</p>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<div class="bg-white/5 p-3 rounded-lg text-center">
+<span class="block font-title-lg text-title-lg text-primary">12</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Matches</span>
+</div>
+<div class="bg-white/5 p-3 rounded-lg text-center">
+<span class="block font-title-lg text-title-lg text-secondary">8.5</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Rating</span>
+</div>
+<div class="bg-white/5 p-3 rounded-lg text-center">
+<span class="block font-title-lg text-title-lg text-tertiary">24</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Goals</span>
+</div>
+</div>
+</div>
+</section>
+<!-- My Comments Activity -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md text-on-surface">My Comments</h3>
+<button class="text-primary font-label-sm text-label-sm hover:underline">View All</button>
+</div>
+<div class="space-y-3">
+<div class="glass-card p-4 rounded-xl flex items-start gap-4">
+<div class="bg-primary/10 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary">chat_bubble</span>
+</div>
+<div class="flex-1 space-y-1">
+<p class="font-body-md text-on-surface">"Great game tonight everyone! Same time next Wednesday at Shoreditch Park?"</p>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">East London 5-a-side</span>
+<span class="w-1 h-1 bg-white/20 rounded-full"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">2h ago</span>
+</div>
+</div>
+</div>
+<div class="glass-card p-4 rounded-xl flex items-start gap-4">
+<div class="bg-primary/10 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary">thumb_up</span>
+</div>
+<div class="flex-1 space-y-1">
+<p class="font-body-md text-on-surface">"Looking for a goalkeeper for this Friday's match. Anyone available?"</p>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Friday Night Lights</span>
+<span class="w-1 h-1 bg-white/20 rounded-full"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Yesterday</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Account Management Settings -->
+<section class="space-y-4">
+<h3 class="font-headline-md text-headline-md text-on-surface">Settings</h3>
+<div class="glass-card rounded-xl overflow-hidden divide-y divide-white/5">
+<button class="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-colors">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">manage_accounts</span>
+<span class="font-body-lg text-body-lg">Account Information</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-colors">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">notifications_active</span>
+<span class="font-body-lg text-body-lg">Notification Preferences</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-colors">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">security</span>
+<span class="font-body-lg text-body-lg">Privacy &amp; Security</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-colors">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">help</span>
+<span class="font-body-lg text-body-lg">Support Center</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- Logout Action -->
+<div class="pt-4">
+<button class="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-xl border border-error/30 text-error hover:bg-error/5 transition-all duration-150 active:scale-[0.98]">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-title-lg text-title-lg">Logout</span>
+</button>
+<p class="mt-6 text-center font-label-sm text-label-sm text-on-surface-variant/40">
+                FootyLocal v2.4.0 • Made for the love of the game
+            </p>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full h-20 bg-surface-container/90 dark:bg-surface-container/90 backdrop-blur-md border-t border-white/5 shadow-[0_-4px_20px_rgba(0,0,0,0.4)] flex justify-around items-center px-4 pb-safe z-50 rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary/80 transition-all duration-150" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span class="font-label-sm text-label-sm">Feed</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary/80 transition-all duration-150" href="#">
+<span class="material-symbols-outlined">location_on</span>
+<span class="font-label-sm text-label-sm">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold bg-primary/10 rounded-xl px-4 py-1 scale-90 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .glass-card {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .pitch-line {
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    body {
+      background-color: #0b1326;
+      color: #dae2fd;
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-container": "#004b1e",
+            "surface-container": "#171f33",
+            "on-error-container": "#ffdad6",
+            "on-tertiary-fixed-variant": "#004c69",
+            "inverse-surface": "#dae2fd",
+            "primary": "#4be277",
+            "outline-variant": "#3d4a3d",
+            "error": "#ffb4ab",
+            "on-primary-fixed-variant": "#005321",
+            "on-secondary-fixed-variant": "#5a4300",
+            "on-error": "#690005",
+            "surface": "#0b1326",
+            "secondary-container": "#e4ae00",
+            "primary-container": "#22c55e",
+            "surface-container-highest": "#2d3449",
+            "secondary-fixed-dim": "#f7be1d",
+            "surface-bright": "#31394d",
+            "on-secondary-container": "#5b4400",
+            "on-primary": "#003915",
+            "secondary": "#ffca45",
+            "surface-variant": "#2d3449",
+            "on-secondary-fixed": "#251a00",
+            "secondary-fixed": "#ffdf9a",
+            "on-surface": "#dae2fd",
+            "on-tertiary": "#00354a",
+            "on-tertiary-fixed": "#001e2c",
+            "inverse-on-surface": "#283044",
+            "on-background": "#dae2fd",
+            "tertiary-container": "#2eb7f2",
+            "primary-fixed-dim": "#4ae176",
+            "outline": "#869585",
+            "surface-container-low": "#131b2e",
+            "on-surface-variant": "#bccbb9",
+            "on-primary-fixed": "#002109",
+            "tertiary": "#7cd0ff",
+            "tertiary-fixed-dim": "#7bd0ff",
+            "surface-tint": "#4ae176",
+            "surface-container-lowest": "#060e20",
+            "error-container": "#93000a",
+            "surface-dim": "#0b1326",
+            "tertiary-fixed": "#c4e7ff",
+            "inverse-primary": "#006e2f",
+            "background": "#0b1326",
+            "on-secondary": "#3f2e00",
+            "surface-container-high": "#222a3d",
+            "primary-fixed": "#6bff8f",
+            "on-tertiary-container": "#00455f"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "container-padding": "1.25rem",
+            "stack-md": "1rem",
+            "stack-lg": "2rem",
+            "unit": "4px",
+            "gutter": "1rem",
+            "stack-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "label-sm": ["JetBrains Mono"],
+            "body-lg": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "headline-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "title-lg": ["Inter"],
+            "display-lg": ["Inter"]
+          },
+          "fontSize": {
+            "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+            "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+            "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+            "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+            "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+            "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md antialiased">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-white/10 flex justify-between items-center h-16 px-container-padding">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-2xl">sports_soccer</span>
+<h1 class="font-display-lg text-title-lg font-black tracking-tighter text-primary">FootyLocal</h1>
+</div>
+<div class="flex gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-white/5 transition-colors p-2 rounded-full">notifications</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-primary/30">
+<img alt="Profile" data-alt="A close-up portrait of a young athletic male player with a focused expression, set against a blurred stadium background at dusk. The lighting is dramatic and cinematic, with cool blue tones and warm electric green highlights that match the FootyLocal brand aesthetic. Professional sports photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmmfKxUhFGknQcjnBxxFKecZjOZE-y1EYmGg26Q7ohaMx7HwaCGeEm_0LTImvvgL7y87rey3Ugv_QC2y08QA4MKVjegydrEckClQcX8a17lgcAmmSNpv96x53GT-T-IzJrEJEWzBYh-fKctZGdxQa4kk6j1yB7FhvuE_XR-9G8AP0UbMCt6LGIVd7o3a6HVaenhKJ62r4RbDkPaoTb-5Ixxfy2hcGWqUirCG6qDqbeTtr0dbX5WLfeBU68XSgbR4xjbf9dGX1ScQ"/>
+</div>
+</div>
+</header>
+<main class="pt-20 pb-24 px-container-padding">
+<!-- Search and Filters Section -->
+<section class="mb-stack-lg">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-xl py-3.5 pl-12 pr-4 text-on-surface placeholder:text-on-surface-variant/50 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container transition-all" placeholder="Search players or teams..." type="text"/>
+</div>
+<div class="mt-stack-md flex gap-2 overflow-x-auto pb-2 scroll-smooth">
+<button class="bg-primary-container text-on-primary-container font-label-sm text-label-sm px-5 py-2 rounded-full whitespace-nowrap">All</button>
+<button class="bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm px-5 py-2 rounded-full whitespace-nowrap hover:bg-surface-bright transition-colors">Attackers</button>
+<button class="bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm px-5 py-2 rounded-full whitespace-nowrap hover:bg-surface-bright transition-colors">Midfielders</button>
+<button class="bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm px-5 py-2 rounded-full whitespace-nowrap hover:bg-surface-bright transition-colors">Defenders</button>
+<button class="bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm px-5 py-2 rounded-full whitespace-nowrap hover:bg-surface-bright transition-colors">Goalkeepers</button>
+</div>
+</section>
+<!-- Player Feed Content -->
+<div class="space-y-4">
+<!-- Player Card 1 -->
+<article class="glass-card rounded-2xl overflow-hidden flex flex-col sm:flex-row group transition-all duration-300 hover:border-primary/30">
+<div class="h-48 sm:w-40 sm:h-auto relative overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A professional action shot of Marcus Rashford playing on a brightly lit football pitch at night. The atmosphere is high-energy with stadium floodlights creating a vibrant glow and deep shadows. The color palette features rich dark blues and vibrant green grass, aligned with the modern corporate glassmorphism style of the app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCaQid19Xs5Rz3yuz20ULtr3zIDhjuWRHP_h1L6eEJ9Hj1hK6TctNLm0bj56N3dIYjxbNZYZ4Do2ClnQqmE4utG2OeD2SGzFgdbNx7iXIIz_2Rv_Z9AiTbCQ7ypb9S3YUCrH4qY4r6RjRiGIz1PCFx42uoieTzHaMd4HcCtl6zfPgaELygQJ7g71QI9Uj-d6FT2RsQBR4OkyaLUSyhOVwVYLJYkxK0SU5dPF4o8XaYRzIYzcEBG72x5l4YsxWpQqyv7DEfOHvitA"/>
+<div class="absolute top-2 left-2 bg-primary/90 text-on-primary px-2 py-1 rounded text-[10px] font-black uppercase tracking-widest">PRO</div>
+</div>
+<div class="p-4 flex-1 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-title-lg text-title-lg text-on-surface">Marcus Rashford</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-secondary text-sm">shield</span>
+<p class="text-on-surface-variant text-body-md font-body-md">Manchester United</p>
+</div>
+</div>
+<button class="text-primary material-symbols-outlined">favorite</button>
+</div>
+<div class="flex items-center gap-1 mt-3">
+<span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-on-surface-variant text-base">star</span>
+<span class="ml-2 font-label-sm text-label-sm text-on-surface-variant">4.8 (120 reviews)</span>
+</div>
+</div>
+<div class="mt-4 flex gap-2">
+<span class="bg-primary/10 text-primary px-3 py-1 rounded-lg text-label-sm font-label-sm">Forward</span>
+<span class="bg-tertiary/10 text-tertiary px-3 py-1 rounded-lg text-label-sm font-label-sm">Top Scorer</span>
+</div>
+</div>
+</article>
+<!-- Player Card 2 -->
+<article class="glass-card rounded-2xl overflow-hidden flex flex-col sm:flex-row group transition-all duration-300 hover:border-primary/30">
+<div class="h-48 sm:w-40 sm:h-auto relative overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A dynamic shot of a creative midfielder scanning the pitch during a night match. The background is a soft bokeh of stadium lights in blues and deep navies. Sharp, high-contrast lighting captures the sweat and determination on the player's face, conveying a professional and atmospheric football match feeling." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgb0nKxE4_eIgD9-FIveK0bC_PyMZTtarza2HAAGFq6P5zZV8-38JMWeA4xupFO9f_v_SI2FRcFBJ_YZivT2AAcQzY9bfgtDCUzN0faUCz8yAOhT_kHDGsYy93cIRntCyt12pCeDxYXt9cOhuBkypTqg5VBJL4rFDCA_uvP5OLGDKLKCSKNDqzOp_7X2nFeX0emxWmtbfrIj0n91fnleex9bIo_jPC6iE_wKhPhtM7S1kIVaUt43ZrUdJJaDhwAU26IbZK3YUhuw"/>
+</div>
+<div class="p-4 flex-1 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-title-lg text-title-lg text-on-surface">Kevin De Bruyne</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-secondary text-sm">shield</span>
+<p class="text-on-surface-variant text-body-md font-body-md">Manchester City</p>
+</div>
+</div>
+<button class="text-on-surface-variant material-symbols-outlined">favorite</button>
+</div>
+<div class="flex items-center gap-1 mt-3">
+<span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="ml-2 font-label-sm text-label-sm text-on-surface-variant">5.0 (215 reviews)</span>
+</div>
+</div>
+<div class="mt-4 flex gap-2">
+<span class="bg-primary/10 text-primary px-3 py-1 rounded-lg text-label-sm font-label-sm">Midfielder</span>
+<span class="bg-secondary/10 text-secondary px-3 py-1 rounded-lg text-label-sm font-label-sm">Playmaker</span>
+</div>
+</div>
+</article>
+<!-- Player Card 3 -->
+<article class="glass-card rounded-2xl overflow-hidden flex flex-col sm:flex-row group transition-all duration-300 hover:border-primary/30">
+<div class="h-48 sm:w-40 sm:h-auto relative overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A powerful defender jumping for a header in a crowded penalty area. The scene is illuminated by dramatic overhead stadium lights, casting long shadows. The overall aesthetic is dark and immersive with high-contrast electric green accents highlighting the movement and power of the professional football athlete." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBap_9NKa225SgX0sHuJdusdgzdBZCWsXLUY0Li4eiwrus-6rQFd0acFeUNAnr6oqombly8rlfyVgnpspeFoupiCF9fxHoelXIg-4Ijmpgrgsbzetms_1-LpkM1kro-yoAjL2RqBZkdlv4TWj1D5GTht-pY4AcqvrdAWLsIz55lAUSXT5lmMHQl3zvXm4S4ulUR3DWcDALHNRMNQTXIIGfFDs6y_jQxEvxP1DjUQ5-cFmnYgdxYPU8CEaM_jCzyDnajub0rkFXkvg"/>
+</div>
+<div class="p-4 flex-1 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-title-lg text-title-lg text-on-surface">Virgil van Dijk</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-secondary text-sm">shield</span>
+<p class="text-on-surface-variant text-body-md font-body-md">Liverpool FC</p>
+</div>
+</div>
+<button class="text-on-surface-variant material-symbols-outlined">favorite</button>
+</div>
+<div class="flex items-center gap-1 mt-3">
+<span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-secondary text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-on-surface-variant text-base">star</span>
+<span class="ml-2 font-label-sm text-label-sm text-on-surface-variant">4.9 (182 reviews)</span>
+</div>
+</div>
+<div class="mt-4 flex gap-2">
+<span class="bg-primary/10 text-primary px-3 py-1 rounded-lg text-label-sm font-label-sm">Defender</span>
+<span class="bg-error/10 text-error px-3 py-1 rounded-lg text-label-sm font-label-sm">The Wall</span>
+</div>
+</div>
+</article>
+</div>
+<!-- Load More Footer Button -->
+<div class="mt-stack-lg flex justify-center pb-8">
+<button class="w-full sm:w-auto bg-surface-container-high border border-white/10 text-on-surface py-3 px-8 rounded-xl font-title-lg text-body-lg hover:bg-surface-bright active:scale-95 transition-all">
+        Load More
+      </button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full h-20 bg-surface-container/90 dark:bg-surface-container/90 backdrop-blur-md border-t border-white/5 flex justify-around items-center px-4 pb-safe z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.4)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-primary font-bold bg-primary/10 rounded-xl px-4 py-1 active:scale-90 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">list_alt</span>
+<span class="font-label-sm text-label-sm">Feed</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary/80 transition-colors" href="#">
+<span class="material-symbols-outlined">location_on</span>
+<span class="font-label-sm text-label-sm">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary/80 transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<!-- FAB (Contextual for Discovery) -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center active:scale-90 transition-transform z-40">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 600;">add</span>
+</button>
+</body></html>
