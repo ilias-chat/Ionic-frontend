@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   OnDestroy,
@@ -32,7 +31,7 @@ const RADIUS_KM = 150;
   styleUrls: ['./map.page.scss'],
   imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonSpinner, IonButton, IonButtons],
 })
-export class MapPage implements AfterViewInit, OnDestroy {
+export class MapPage implements OnDestroy {
   private readonly api = inject(PlayerApiService);
 
   @ViewChild('mapHost', { read: ElementRef }) mapHost?: ElementRef<HTMLElement>;
@@ -45,7 +44,12 @@ export class MapPage implements AfterViewInit, OnDestroy {
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
 
-  ngAfterViewInit(): void {
+  /** Called by Ionic after the page transition finishes — element has real dimensions here */
+  ionViewDidEnter(): void {
+    if (this.map) {
+      this.map.invalidateSize();
+      return;
+    }
     const el = this.mapHost?.nativeElement;
     if (!el) {
       return;
@@ -88,10 +92,16 @@ export class MapPage implements AfterViewInit, OnDestroy {
     this.move$.next(c);
   }
 
-  ngOnDestroy(): void {
+  ionViewWillLeave(): void {
     this.moveSub?.unsubscribe();
+    this.moveSub = undefined;
     this.map?.remove();
     this.map = undefined;
+    this.markers.clearLayers();
+  }
+
+  ngOnDestroy(): void {
+    this.ionViewWillLeave();
   }
 
   recenter(): void {

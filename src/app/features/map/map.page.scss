@@ -1,21 +1,21 @@
 .map-page {
   --background: var(--fl-background);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
 }
 
+/* The leaflet div must fill the ion-content scroll element, not the host */
 .leaflet-host {
-  flex: 1;
+  position: absolute;
+  inset: 0;
   width: 100%;
-  min-height: 280px;
+  height: 100%;
 }
 
 .map-overlay {
   position: absolute;
   z-index: 1000;
-  inset-inline: 0;
   top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: center;
   padding-top: 0.5rem;
@@ -23,6 +23,11 @@
 }
 
 .map-error {
+  position: absolute;
+  z-index: 999;
+  top: 0.5rem;
+  left: 1rem;
+  right: 1rem;
   color: var(--ion-color-danger);
   margin: 0;
 }

@@ -1,14 +1,15 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-title>Discover</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="refresh()" [disabled]="loading()">
+        <ion-icon name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding discovery">
-  <ion-refresher slot="fixed" (ionRefresh)="onRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-
   <ion-segment [value]="searchScope()" (ionChange)="onScopeChange($event)">
     <ion-segment-button value="team">
       <ion-label>Team</ion-label>
@@ -68,9 +69,10 @@
         </ion-card-header>
       </ion-card>
     }
+    @if (hasMore()) {
+      <ion-button expand="block" fill="outline" class="ion-margin-top" [disabled]="loading()" (click)="loadMoreManual()">
+        Load more
+      </ion-button>
+    }
   }
-
-  <ion-infinite-scroll threshold="120px" [disabled]="!hasMore() || initialLoading()" (ionInfinite)="loadMore($event)">
-    <ion-infinite-scroll-content loadingText="Loading more..."></ion-infinite-scroll-content>
-  </ion-infinite-scroll>
 </ion-content>

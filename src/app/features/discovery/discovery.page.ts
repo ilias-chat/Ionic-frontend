@@ -2,19 +2,17 @@ import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   IonBadge,
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardSubtitle,
-    IonChip,
+  IonButton,
+  IonButtons,
+  IonCard,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonChip,
   IonContent,
   IonHeader,
   IonIcon,
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
   IonLabel,
-  IonRefresher,
-  IonRefresherContent,
   IonSearchbar,
   IonSegment,
   IonSegmentButton,
@@ -23,7 +21,7 @@ import {
   IonToolbar,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { personOutline } from 'ionicons/icons';
+import { personOutline, refreshOutline } from 'ionicons/icons';
 import { firstValueFrom } from 'rxjs';
 import { PlayerApiService } from '../../core/api/player-api.service';
 import { Player } from '../../shared/models/player.model';
@@ -39,9 +37,9 @@ const POSITIONS = ['Attacker', 'Midfielder', 'Defender', 'Goalkeeper'] as const;
     IonHeader,
     IonToolbar,
     IonTitle,
+    IonButtons,
+    IonButton,
     IonContent,
-    IonRefresher,
-    IonRefresherContent,
     IonSearchbar,
     IonSegment,
     IonSegmentButton,
@@ -52,8 +50,6 @@ const POSITIONS = ['Attacker', 'Midfielder', 'Defender', 'Goalkeeper'] as const;
     IonCardTitle,
     IonCardSubtitle,
     IonIcon,
-    IonInfiniteScroll,
-    IonInfiniteScrollContent,
     IonSkeletonText,
     IonBadge,
   ],
@@ -74,11 +70,23 @@ export class DiscoveryPage implements OnInit {
   readonly hasMore = computed(() => this.players().length < this.total());
 
   constructor() {
-    addIcons({ personOutline });
+    addIcons({ personOutline, refreshOutline });
   }
 
   ngOnInit(): void {
     void this.reload(true);
+  }
+
+  refresh(): void {
+    void this.reload(true);
+  }
+
+  loadMoreManual(): void {
+    if (!this.hasMore() || this.loading()) {
+      return;
+    }
+    this.page.update((p) => p + 1);
+    void this.reload(false);
   }
 
   onSearchChange(ev: CustomEvent): void {
@@ -98,11 +106,6 @@ export class DiscoveryPage implements OnInit {
   togglePosition(pos: string): void {
     this.selectedPosition.update((cur) => (cur === pos ? null : pos));
     void this.reload(true);
-  }
-
-  async onRefresh(ev: CustomEvent): Promise<void> {
-    await this.reload(true);
-    (ev.target as HTMLIonRefresherElement).complete();
   }
 
   async reload(reset: boolean): Promise<void> {
@@ -146,20 +149,14 @@ export class DiscoveryPage implements OnInit {
         this.players.update((cur) => (reset ? res.data : [...cur, ...res.data]));
         this.total.set(res.total);
       }
+    } catch {
+      if (reset) {
+        this.players.set([]);
+        this.total.set(0);
+      }
     } finally {
       this.loading.set(false);
       this.initialLoading.set(false);
     }
-  }
-
-  async loadMore(ev: CustomEvent): Promise<void> {
-    const target = ev.target as HTMLIonInfiniteScrollElement;
-    if (!this.hasMore()) {
-      target.complete();
-      return;
-    }
-    this.page.update((p) => p + 1);
-    await this.reload(false);
-    target.complete();
   }
 }

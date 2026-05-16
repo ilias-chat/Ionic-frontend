@@ -3,7 +3,6 @@ import { Auth } from '@angular/fire/auth';
 import {
   IonIcon,
   IonLabel,
-  IonRouterOutlet,
   IonTabBar,
   IonTabButton,
   IonTabs,
@@ -16,7 +15,7 @@ import { GuestSessionService } from '../../core/session/guest-session.service';
 @Component({
   selector: 'app-tabs',
   templateUrl: './tabs.page.html',
-  imports: [IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon, IonLabel],
+  imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel],
 })
 export class TabsPage implements OnInit {
   private readonly auth = inject(Auth);

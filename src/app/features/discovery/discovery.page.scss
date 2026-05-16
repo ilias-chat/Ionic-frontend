@@ -2,6 +2,10 @@
   --background: var(--fl-background);
 }
 
+.discovery-inner {
+  /* plain block container — no flex/position that could break ionic scroll */
+}
+
 .chips-row {
   display: flex;
   flex-wrap: wrap;
