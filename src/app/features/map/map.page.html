@@ -1,13 +1,99 @@
 <app-shell-header layout="brand" [showSearch]="true" />
 
 <ion-content scroll-y="false" class="map-page">
-  <div #mapHost class="leaflet-host"></div>
-  @if (loading()) {
-    <div class="map-overlay">
-      <ion-spinner name="crescent"></ion-spinner>
+  <div class="map-canvas">
+    <div #mapHost class="leaflet-host"></div>
+    <div class="pitch-lines" aria-hidden="true">
+      <div class="pitch-midline"></div>
+      <div class="pitch-circle"></div>
     </div>
-  }
-  @if (error()) {
-    <p class="map-error">{{ error() }}</p>
-  }
+    <div class="map-vignette" aria-hidden="true"></div>
+
+    @if (loading()) {
+      <div class="map-loading" aria-live="polite">
+        <ion-spinner name="crescent"></ion-spinner>
+      </div>
+    }
+
+    <button
+      type="button"
+      class="recenter-fab"
+      aria-label="Center map on my location"
+      (click)="recenterOnUser()"
+    >
+      <ion-icon name="locate-outline"></ion-icon>
+    </button>
+  </div>
+
+  <div class="map-sheet" [class.map-sheet--empty]="!selectedStadium() && !loading()">
+    <div class="glass-panel sheet-panel">
+      <div class="sheet-handle" aria-hidden="true"></div>
+
+      @if (error()) {
+        <p class="sheet-error">{{ error() }}</p>
+      } @else if (loading() && !selectedStadium()) {
+        <div class="sheet-skeleton">
+          <div class="sk-line sk-line--sm"></div>
+          <div class="sk-line sk-line--lg"></div>
+          <div class="sk-line sk-line--md"></div>
+        </div>
+      } @else if (selectedStadium(); as stadium) {
+        <div class="sheet-header">
+          <div class="sheet-header-text">
+            <p class="sheet-eyebrow">Live Matchday</p>
+            <h2 class="sheet-title">{{ stadium.name }}</h2>
+            <p class="sheet-subtitle">
+              <ion-icon name="location-outline"></ion-icon>
+              @if (!locationFromDevice()) {
+                London area ·
+              }
+              {{ locationSubtitle(stadium) }}
+            </p>
+          </div>
+          <div class="avatar-stack">
+            @for (p of stadium.players.slice(0, 2); track p._id) {
+              <div class="avatar-stack-item">
+                <app-player-photo [player]="p" variant="card" />
+              </div>
+            }
+            @if (overflowCount() > 0) {
+              <div class="avatar-stack-more">+{{ overflowCount() }}</div>
+            }
+          </div>
+        </div>
+
+        <div class="player-scroll">
+          @for (p of stadium.players; track p._id) {
+            <a class="sheet-player-card" [routerLink]="['/player', p._id]">
+              <div class="sheet-player-photo">
+                <app-player-photo [player]="p" variant="card" />
+              </div>
+              <div class="sheet-player-body">
+                <div class="sheet-player-meta">
+                  @if (p.position) {
+                    <span class="badge badge--open">{{ p.position }}</span>
+                  } @else {
+                    <span class="badge badge--open">Player</span>
+                  }
+                  <span class="sheet-player-league">{{ p.league }}</span>
+                </div>
+                <h3 class="sheet-player-name">{{ p.name }}</h3>
+                <p class="sheet-player-team">{{ p.team }}</p>
+              </div>
+            </a>
+          }
+        </div>
+
+      } @else {
+        <div class="sheet-empty">
+          <p class="sheet-eyebrow">Pitch Map</p>
+          <h2 class="sheet-title">No players nearby</h2>
+          <p class="sheet-subtitle">
+            <ion-icon name="navigate-outline"></ion-icon>
+            Pan or zoom the map to explore other areas
+          </p>
+        </div>
+      }
+    </div>
+  </div>
 </ion-content>

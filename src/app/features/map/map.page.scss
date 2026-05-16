@@ -1,33 +1,525 @@
+$background: #0b1326;
+$surface: #0b1326;
+$surface-container: #171f33;
+$surface-container-lowest: #060e20;
+$surface-container-highest: #2d3449;
+$surface-container-high: #222a3d;
+$primary: #4be277;
+$primary-container: #22c55e;
+$on-primary: #003915;
+$on-primary-container: #004b1e;
+$on-surface: #dae2fd;
+$on-surface-variant: #bccbb9;
+$secondary: #ffca45;
+$container-padding: 1.25rem;
+
 .map-page {
-  --background: var(--fl-background);
+  --background: #{$background};
 }
 
-/* The leaflet div must fill the ion-content scroll element, not the host */
+.map-canvas {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: $surface-container-lowest;
+}
+
 .leaflet-host {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  z-index: 0;
 }
 
-.map-overlay {
+.pitch-lines {
   position: absolute;
-  z-index: 1000;
-  top: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  padding-top: 0.5rem;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.1;
   pointer-events: none;
 }
 
-.map-error {
+.pitch-midline {
   position: absolute;
-  z-index: 999;
-  top: 0.5rem;
-  left: 1rem;
-  right: 1rem;
-  color: var(--ion-color-danger);
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: #fff;
+}
+
+.pitch-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12rem;
+  height: 12rem;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.map-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at center,
+    transparent 0%,
+    rgba(11, 19, 38, 0.4) 70%,
+    rgba(11, 19, 38, 0.8) 100%
+  );
+}
+
+.map-loading {
+  position: absolute;
+  z-index: 400;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+
+  ion-spinner {
+    width: 1.5rem;
+    height: 1.5rem;
+    --color: #{$primary};
+  }
+}
+
+.recenter-fab {
+  position: absolute;
+  z-index: 400;
+  right: 1.5rem;
+  bottom: calc(11rem + env(safe-area-inset-bottom, 0px));
+  width: 3.5rem;
+  height: 3.5rem;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $primary-container;
+  color: $on-primary-container;
+  box-shadow: 0 8px 24px rgba(34, 197, 94, 0.4);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+
+  ion-icon {
+    font-size: 1.75rem;
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+}
+
+.map-sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 500;
+  pointer-events: none;
+
+  &.map-sheet--empty .sheet-panel {
+    min-height: 8rem;
+  }
+}
+
+.glass-panel {
+  pointer-events: auto;
+  background: rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 2rem 2rem 0 0;
+  border-bottom: none;
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.6);
+}
+
+.sheet-panel {
+  padding: 0.75rem $container-padding 0.75rem;
+  max-height: min(42vh, 22rem);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.sheet-handle {
+  width: 3rem;
+  height: 0.375rem;
+  margin: 0 auto 1.25rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.sheet-error {
   margin: 0;
+  color: #ffb4ab;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+}
+
+.sheet-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  .sk-line {
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.08);
+    animation: map-pulse 1.2s ease-in-out infinite;
+
+    &--sm {
+      width: 40%;
+      height: 0.75rem;
+    }
+
+    &--lg {
+      width: 70%;
+      height: 1.5rem;
+    }
+
+    &--md {
+      width: 55%;
+      height: 0.875rem;
+    }
+  }
+}
+
+@keyframes map-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-shrink: 0;
+}
+
+.sheet-header-text {
+  min-width: 0;
+}
+
+.sheet-eyebrow {
+  margin: 0 0 0.25rem;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $primary;
+}
+
+.sheet-title {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: $on-surface;
+}
+
+.sheet-subtitle {
+  margin: 0.35rem 0 0;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  color: $on-surface-variant;
+
+  ion-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+}
+
+.avatar-stack {
+  display: flex;
+  flex-shrink: 0;
+
+  > * + * {
+    margin-left: -0.75rem;
+  }
+}
+
+.avatar-stack-item {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 2px solid $surface-container;
+  overflow: hidden;
+  background: $surface-container;
+
+  app-player-photo {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.avatar-stack-more {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 2px solid $surface-container;
+  background: $surface-container-highest;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: $primary;
+}
+
+.player-scroll {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  margin: 0 calc(-1 * #{$container-padding});
+  padding-left: $container-padding;
+  padding-right: $container-padding;
+  scrollbar-width: none;
+  flex: 1;
+  min-height: 0;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.sheet-player-card {
+  flex: 0 0 17.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(34, 42, 61, 0.4);
+  backdrop-filter: blur(8px);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.sheet-player-photo {
+  width: 5rem;
+  height: 5rem;
+  flex-shrink: 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: $surface-container;
+}
+
+.sheet-player-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.sheet-player-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.badge {
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  text-transform: uppercase;
+
+  &--open {
+    background: rgba(75, 226, 119, 0.1);
+    color: $primary;
+  }
+}
+
+.sheet-player-league {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: $on-surface-variant;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 6rem;
+}
+
+.sheet-player-name {
+  margin: 0.25rem 0 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: $on-surface;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sheet-player-team {
+  margin: 0.15rem 0 0;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: $on-surface-variant;
+}
+
+.sheet-empty {
+  padding-bottom: 0.5rem;
+}
+
+// Leaflet pins + controls
+:host ::ng-deep {
+  .leaflet-div-icon.map-pin-host {
+    background: transparent;
+    border: none;
+  }
+
+  .leaflet-control-zoom {
+    border: none !important;
+    margin-left: 0.75rem !important;
+    margin-top: 0.75rem !important;
+
+    a {
+      background: rgba(30, 41, 59, 0.9) !important;
+      color: $on-surface !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+
+      &:hover {
+        background: $surface-container-highest !important;
+      }
+    }
+  }
+
+  .leaflet-control-attribution {
+    background: rgba(6, 14, 32, 0.75) !important;
+    color: $on-surface-variant !important;
+    font-size: 0.65rem;
+
+    a {
+      color: $primary !important;
+    }
+  }
+
+  .pin-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  .pin-stack--secondary {
+    opacity: 0.7;
+  }
+
+  .pin-label {
+    margin-bottom: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    background: $primary;
+    color: $on-primary;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+    max-width: 9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-shadow: 0 4px 12px rgba(75, 226, 119, 0.2);
+  }
+
+  .pin-marker {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pin-bubble {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  }
+
+  .pin-bubble--active {
+    width: 3rem;
+    height: 3rem;
+    background: $primary;
+    border: 4px solid $surface;
+    transform: scale(1.1);
+  }
+
+  .pin-bubble--secondary {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: $surface-container-highest;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .pin-tail {
+    position: absolute;
+    bottom: -0.2rem;
+    left: 50%;
+    width: 0.65rem;
+    height: 0.65rem;
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  .pin-tail--active {
+    background: $primary;
+    border-right: 1px solid $surface;
+    border-bottom: 1px solid $surface;
+  }
+
+  .pin-tail--secondary {
+    background: $surface-container-highest;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .pin-glyph {
+    display: block;
+    width: 1.1rem;
+    height: 1.1rem;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+
+  .pin-glyph--stadium {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23003915'%3E%3Cpath d='M12 2C8 2 4 4 4 8v8c0 4 4 6 8 6s8-2 8-6V8c0-4-4-6-8-6zm0 2c2.8 0 6 1.5 6 4v1H6V8c0-2.5 3.2-4 6-4zM6 13h12v3c0 2.5-3.2 4-6 4s-6-1.5-6-4v-3z'/%3E%3C/svg%3E");
+  }
+
+  .pin-glyph--ball {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234be277'%3E%3Cpath d='M12 2a10 10 0 100 20 10 10 0 000-20zm0 2c1.2 0 2.3.3 3.3.8L12 9.5 8.7 4.8A8 8 0 0112 4zm-4.9 1.4L10 11.2l-5.5 3.2A7.96 7.96 0 017.1 5.4zM4.8 15.5l6.1-.1L12 20.8a8 8 0 01-7.2-5.3zm8.4 5.1l1.1-5.4 6.1.1a8 8 0 01-7.2 5.3zM19.2 14.4l-5.5-3.2 2.1-5.8a8 8 0 013.4 9z'/%3E%3C/svg%3E");
+  }
+
+  .pin-glyph--ticket {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffca45'%3E%3Cpath d='M22 10v4a2 2 0 01-2 2h-1.18A3 3 0 0016 19v2H8v-2a3 3 0 00-2.82-3H4a2 2 0 01-2-2v-4a2 2 0 012-2h1.18A3 3 0 008 5V3h8v2a3 3 0 002.82 3H20a2 2 0 012 2z'/%3E%3C/svg%3E");
+  }
 }

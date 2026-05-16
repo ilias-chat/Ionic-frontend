@@ -51,13 +51,23 @@ describe('PlayerApiService', () => {
   });
 
   it('nearby calls /nearby with lat, lng, radiusKm', (done) => {
-    service.nearby(51.5, -0.12, 100).subscribe(() => done());
+    service.nearby(51.5, -0.12, { radiusKm: 100 }).subscribe(() => done());
     const req = httpMock.expectOne(
       (r) =>
         r.url === `${base}/api/players/nearby` &&
         r.params.get('lat') === '51.5' &&
         r.params.get('lng') === '-0.12' &&
         r.params.get('radiusKm') === '100'
+    );
+    req.flush({ players: [], stadiums: [] });
+  });
+
+  it('nearby can send distance in meters', (done) => {
+    service.nearby(51.5, -0.12, { distanceMeters: 50_000 }).subscribe(() => done());
+    const req = httpMock.expectOne(
+      (r) =>
+        r.url === `${base}/api/players/nearby` &&
+        r.params.get('distance') === '50000'
     );
     req.flush({ players: [], stadiums: [] });
   });

@@ -42,11 +42,21 @@ export class PlayerApiService {
     return this.http.get<PaginatedPlayers>(`${this.base}/search`, { params: p });
   }
 
-  nearby(lat: number, lng: number, radiusKm: number): Observable<NearbyPlayersResponse> {
-    const p = new HttpParams()
-      .set('lat', String(lat))
-      .set('lng', String(lng))
-      .set('radiusKm', String(radiusKm));
+  /**
+   * Players near a point. Prefer `distanceMeters` (API `distance` query) or `radiusKm`.
+   * @example nearby(51.5, -0.12, { distanceMeters: 50_000 })
+   */
+  nearby(
+    lat: number,
+    lng: number,
+    options: { radiusKm?: number; distanceMeters?: number } = {}
+  ): Observable<NearbyPlayersResponse> {
+    let p = new HttpParams().set('lat', String(lat)).set('lng', String(lng));
+    if (options.distanceMeters != null) {
+      p = p.set('distance', String(options.distanceMeters));
+    } else {
+      p = p.set('radiusKm', String(options.radiusKm ?? 50));
+    }
     return this.http.get<NearbyPlayersResponse>(`${this.base}/nearby`, { params: p });
   }
 
