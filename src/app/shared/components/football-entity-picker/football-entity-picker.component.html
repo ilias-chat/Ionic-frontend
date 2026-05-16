@@ -1,0 +1,64 @@
+<div class="picker" [class.open]="open()" [class.disabled]="disabled()">
+  <label class="field-label">{{ label() }}</label>
+  <button
+    #triggerBtn
+    type="button"
+    class="picker-trigger"
+    (click)="toggle()"
+    [disabled]="disabled() || loading()"
+  >
+    @if (loading()) {
+      <ion-spinner name="crescent" class="picker-spinner"></ion-spinner>
+      <span class="picker-text muted">Loading…</span>
+    } @else if (selected(); as item) {
+      @if (logoUrl(item); as url) {
+        <img class="picker-logo" [src]="url" [alt]="" (error)="onLogoError(item.id)" />
+      } @else {
+        <span class="picker-logo-fallback"><ion-icon name="shield-outline"></ion-icon></span>
+      }
+      <span class="picker-text">
+        <span class="picker-name">{{ item.name }}</span>
+        @if (item.subtitle) {
+          <span class="picker-sub">{{ item.subtitle }}</span>
+        }
+      </span>
+    } @else {
+      <span class="picker-logo-fallback muted"><ion-icon name="shield-outline"></ion-icon></span>
+      <span class="picker-text muted">{{ placeholder() }}</span>
+    }
+    <ion-icon name="chevron-down-outline" class="picker-chevron"></ion-icon>
+  </button>
+
+  @if (open()) {
+    <div class="picker-backdrop" (click)="close()"></div>
+    <ul class="picker-panel" role="listbox" [style]="panelStyle() ?? undefined">
+      @if (!options().length) {
+        <li class="picker-empty">{{ emptyMessage() }}</li>
+      } @else {
+        @for (opt of options(); track opt.id) {
+          <li>
+            <button
+              type="button"
+              class="picker-option"
+              [class.selected]="selectedId() === opt.id"
+              (click)="pick(opt)"
+            >
+              @if (logoUrl(opt); as url) {
+                <img class="picker-logo" [src]="url" [alt]="" (error)="onLogoError(opt.id)" />
+              } @else {
+                <span class="picker-logo-fallback"><ion-icon name="shield-outline"></ion-icon></span>
+              }
+              <span class="picker-text">
+                <span class="picker-name">{{ opt.name }}</span>
+                @if (opt.subtitle) {
+                  <span class="picker-sub">{{ opt.subtitle }}</span>
+                }
+                <span class="picker-id">ID {{ opt.id }}</span>
+              </span>
+            </button>
+          </li>
+        }
+      }
+    </ul>
+  }
+</div>

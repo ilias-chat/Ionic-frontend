@@ -4,6 +4,11 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { PlayerComment } from '../../shared/models/comment.model';
 import { NearbyPlayersResponse, PaginatedPlayers, Player } from '../../shared/models/player.model';
+import {
+  FootballLeagueOption,
+  FootballOptionsResponse,
+  FootballTeamOption,
+} from '../../shared/models/football-api.model';
 import { ImportPlayersResponse } from '../../shared/models/user.model';
 
 @Injectable({ providedIn: 'root' })
@@ -64,6 +69,24 @@ export class PlayerApiService {
     return this.http.post<ImportPlayersResponse>(
       `${environment.apiBaseUrl}/api/admin/import-players`,
       body
+    );
+  }
+
+  adminLeagues(season: number): Observable<FootballOptionsResponse<FootballLeagueOption>> {
+    const params = new HttpParams().set('season', String(season));
+    return this.http.get<FootballOptionsResponse<FootballLeagueOption>>(
+      `${environment.apiBaseUrl}/api/admin/leagues`,
+      { params }
+    );
+  }
+
+  adminTeams(leagueId: number, season: number): Observable<FootballOptionsResponse<FootballTeamOption>> {
+    const params = new HttpParams()
+      .set('leagueId', String(leagueId))
+      .set('season', String(season));
+    return this.http.get<FootballOptionsResponse<FootballTeamOption>>(
+      `${environment.apiBaseUrl}/api/admin/teams`,
+      { params }
     );
   }
 }

@@ -1,25 +1,88 @@
 <app-shell-header layout="title" title="Admin Panel" [showNotifications]="true" [showAvatar]="true" />
 
-<ion-content class="ion-padding admin">
-  <ion-card class="fl-glass-card">
-    <ion-card-header>
-      <ion-card-title>API-Football squad import</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item>
-        <ion-input label="League ID" labelPlacement="stacked" type="number" [(ngModel)]="leagueIdStr"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-input label="Team ID" labelPlacement="stacked" type="number" [(ngModel)]="teamIdStr"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-input label="Season (year)" labelPlacement="stacked" type="number" [(ngModel)]="seasonStr"></ion-input>
-      </ion-item>
-      <ion-button expand="block" class="ion-margin-top" [disabled]="busy()" (click)="submit()">Run import</ion-button>
-      <ion-note class="ion-margin-top" color="medium">Requires an account with admin role on the API.</ion-note>
-      @if (lastResult(); as r) {
-        <pre class="result ion-margin-top">{{ r | json }}</pre>
-      }
-    </ion-card-content>
-  </ion-card>
+<ion-content class="admin" (ionScroll)="onAdminScroll()">
+  <div class="page-inner">
+    <section class="welcome">
+      <h2 class="welcome-title">System Control</h2>
+      <p class="welcome-text">
+        Manage the FootyLocal ecosystem. Choose a season, league, and team from API-Football, then
+        import the squad into your database.
+      </p>
+    </section>
+
+    <div class="bento-grid">
+      <article class="glass-card import-card">
+        <div class="card-heading">
+          <ion-icon name="server-outline" class="heading-icon secondary"></ion-icon>
+          <h3 class="card-title">Data Import Tool</h3>
+        </div>
+
+        <form class="import-form" (ngSubmit)="submit()">
+          <div class="field">
+            <label class="field-label" for="season">Season</label>
+            <select
+              id="season"
+              class="field-input field-select"
+              [(ngModel)]="seasonStr"
+              name="season"
+              [disabled]="busy()"
+              (ngModelChange)="onSeasonChange()"
+            >
+              @for (y of seasonYears; track y) {
+                <option [value]="y">{{ seasonLabel(y) }}</option>
+              }
+            </select>
+          </div>
+
+          <app-football-entity-picker
+            label="League"
+            placeholder="Select league…"
+            [options]="leagueOptions()"
+            [selectedId]="selectedLeagueId()"
+            [loading]="loadingLeagues()"
+            [disabled]="busy()"
+            emptyMessage="No leagues for this season"
+            (selectedChange)="onLeagueChange($event)"
+          />
+
+          <app-football-entity-picker
+            label="Team"
+            placeholder="Select team…"
+            [options]="teamOptions()"
+            [selectedId]="selectedTeamId()"
+            [loading]="loadingTeams()"
+            [disabled]="busy() || selectedLeagueId() == null"
+            emptyMessage="Select a league first"
+            (selectedChange)="onTeamChange($event)"
+          />
+
+          <button class="import-btn" type="submit" [disabled]="!canImport()">
+            <ion-icon name="cloud-upload-outline"></ion-icon>
+            {{ busy() ? 'Importing…' : 'Import Data' }}
+          </button>
+        </form>
+      </article>
+
+      <article class="glass-card banner-card">
+        <img
+          class="banner-img"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOXdhrEVhZ5Gi1R0BiHcEPWmrhkpyDiYhGfY-FMfdsFs7eEMRQmxuTwIM45mB1bVIHLEd0V6-45dyJJb7EquRlEcuV3dipbKQpATeMgEkqkeqf81aam79U7YpU5U7TcXbCU3IsKgkDXP7vU5qvuol3Eq3Ll_GNFQ25yHGfXO1Nurs4WYsJNoBqOXmvnunOeQ1j4TP_JpgQ-bGZrJ6zQbbsR8Vc93B_SgQ4cflwK2oEK-tpGoXXGw0CFUWZrZkU1wyQ_cf4KVhAGg"
+          alt=""
+        />
+        <div class="banner-overlay">
+          <p class="banner-title">Pitch Intelligence v2.0</p>
+          <p class="banner-sub">Global Sync &amp; Analytics Engine</p>
+        </div>
+      </article>
+    </div>
+
+    <footer class="page-footer">
+      <div class="footer-links">
+        <span class="footer-link">Documentation</span>
+        <span class="footer-link">API Status</span>
+        <span class="footer-link">Security</span>
+      </div>
+      <p class="footer-copy">© {{ copyrightYear }} FootyLocal Labs. All rights reserved.</p>
+    </footer>
+  </div>
 </ion-content>
