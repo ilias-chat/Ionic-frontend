@@ -51,7 +51,7 @@
             [options]="teamOptions()"
             [selectedId]="selectedTeamId()"
             [loading]="loadingTeams()"
-            [disabled]="busy() || selectedLeagueId() == null"
+            [disabled]="busy() || selectedLeagueId() === null"
             emptyMessage="Select a league first"
             (selectedChange)="onTeamChange($event)"
           />

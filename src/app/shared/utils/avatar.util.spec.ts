@@ -27,6 +27,6 @@ describe('avatar.util', () => {
   });
 
   it('userInitials falls back to email', () => {
-    expect(userInitials(null, 'alex@footylocal.com')).toBe('al');
+    expect(userInitials(null, 'alex@footylocal.com')).toBe('AL');
   });
 });
