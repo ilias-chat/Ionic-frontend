@@ -1,0 +1,14 @@
+<div class="player-photo" [class.variant-hero]="variant() === 'hero'">
+  <div class="placeholder" [style.background]="gradient()">
+    <span class="initials" [class.hidden]="showPhoto()">{{ initials() }}</span>
+  </div>
+  @if (imageUrl(); as url) {
+    <img
+      class="photo"
+      [class.visible]="showPhoto()"
+      [src]="url"
+      [alt]="player().name"
+      (error)="onImageError()"
+    />
+  }
+</div>

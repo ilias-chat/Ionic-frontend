@@ -15,9 +15,7 @@
     </div>
   } @else if (player(); as p) {
     <section class="hero">
-      <div class="hero-placeholder" [style.background]="placeholderGradient(p)">
-        <span class="hero-initials">{{ initials(p.name) }}</span>
-      </div>
+      <app-player-photo class="hero-photo" [player]="p" variant="hero" />
       <div class="hero-gradient"></div>
       <div class="hero-content">
         <span class="hero-eyebrow">{{ heroSubtitle(p) }}</span>

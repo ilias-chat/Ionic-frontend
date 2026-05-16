@@ -56,11 +56,8 @@
       <div class="card-list">
         @for (p of players(); track p._id) {
           <article class="player-card" [routerLink]="['/player', p._id]">
-            <div
-              class="player-card-image"
-              [style.background]="placeholderGradient(p)"
-            >
-              <span class="player-initials">{{ initials(p.name) }}</span>
+            <div class="player-card-image">
+              <app-player-photo [player]="p" variant="card" />
               @if (positionBadge(p); as badge) {
                 <span class="position-badge" [class]="'pos-' + badge.toLowerCase()">{{ badge }}</span>
               }

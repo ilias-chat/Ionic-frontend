@@ -25,7 +25,7 @@ import { GeoLocateService } from '../../core/geo/geo-locate.service';
 import { GuestSessionService } from '../../core/session/guest-session.service';
 import { PlayerComment } from '../../shared/models/comment.model';
 import { Player, PlayerStats } from '../../shared/models/player.model';
-import { playerInitials, playerPlaceholderGradient } from '../../shared/utils/player-placeholder';
+import { PlayerPhotoComponent } from '../../shared/components/player-photo/player-photo.component';
 
 interface StatTile {
   label: string;
@@ -40,6 +40,7 @@ interface StatTile {
   imports: [
     AppShellHeaderComponent,
     UserAvatarComponent,
+    PlayerPhotoComponent,
     IonContent,
     IonIcon,
     IonModal,
@@ -156,9 +157,6 @@ export class PlayerDetailPage implements OnInit {
     const s = String(n).trim();
     return s ? `#${s.replace(/^#/, '')}` : null;
   }
-
-  readonly initials = playerInitials;
-  readonly placeholderGradient = playerPlaceholderGradient;
 
   stars(rating: number): boolean[] {
     const rounded = Math.max(1, Math.min(5, Math.round(rating)));

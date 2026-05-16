@@ -13,7 +13,7 @@ import { AppShellHeaderComponent } from '../../shared/components/app-shell-heade
 import { firstValueFrom } from 'rxjs';
 import { PlayerApiService } from '../../core/api/player-api.service';
 import { Player } from '../../shared/models/player.model';
-import { playerInitials, playerPlaceholderGradient } from '../../shared/utils/player-placeholder';
+import { PlayerPhotoComponent } from '../../shared/components/player-photo/player-photo.component';
 
 interface PositionOption {
   label: string;
@@ -31,7 +31,7 @@ const POSITIONS: PositionOption[] = [
   selector: 'app-discovery',
   templateUrl: './discovery.page.html',
   styleUrls: ['./discovery.page.scss'],
-  imports: [RouterLink, AppShellHeaderComponent, IonContent, IonIcon, IonSkeletonText],
+  imports: [RouterLink, AppShellHeaderComponent, PlayerPhotoComponent, IonContent, IonIcon, IonSkeletonText],
 })
 export class DiscoveryPage implements OnInit {
   private readonly api = inject(PlayerApiService);
@@ -134,9 +134,6 @@ export class DiscoveryPage implements OnInit {
   }
 
   /* ===================== UI helpers ===================== */
-
-  initials = playerInitials;
-  placeholderGradient = playerPlaceholderGradient;
 
   positionBadge(p: Player): string | null {
     const pos = (p.position || '').toLowerCase();

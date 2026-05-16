@@ -25,22 +25,9 @@
   background: #131b2e;
 }
 
-.hero-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #1e293b 0%, #0b1326 100%);
-}
-
-.hero-initials {
-  font-family: 'Inter', sans-serif;
-  font-weight: 800;
-  font-size: 4rem;
-  color: rgba(255, 255, 255, 0.9);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-  letter-spacing: -0.02em;
+.hero-photo {
+  position: absolute;
+  inset: 0;
 }
 
 .hero-gradient {
