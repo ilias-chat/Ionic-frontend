@@ -2,46 +2,159 @@
 
 <ion-content class="profile">
   <div class="page-inner">
-    <section class="profile-hero glass-card">
-      <div class="avatar-wrap">
-        <app-user-avatar
-          size="lg"
-          [photoUrl]="avatarUrl()"
-          [name]="displayName()"
-          [email]="displayEmail()"
-          [useIconFallback]="false"
-        />
-      </div>
-      <div class="profile-meta">
+    <section class="bento-user">
+      <article class="glass-card profile-card">
+        <div class="avatar-block">
+          <app-user-avatar
+            size="lg"
+            [photoUrl]="avatarUrl()"
+            [name]="displayName()"
+            [email]="displayEmail()"
+            [useIconFallback]="isGuest()"
+          />
+          @if (!isGuest()) {
+            <span class="avatar-edit-badge" aria-hidden="true">
+              <ion-icon name="create-outline"></ion-icon>
+            </span>
+          }
+        </div>
         <h2 class="profile-name">{{ displayName() || 'Guest' }}</h2>
+        <p class="profile-tag">{{ profileTagline() }}</p>
+      </article>
+
+      <article class="glass-card account-card">
         @if (isGuest()) {
-          <p class="profile-sub">Browse as guest</p>
-        } @else if (mongoUser()) {
-          <p class="profile-sub">{{ mongoUser()!.email }}</p>
-          <p class="profile-role">{{ mongoUser()!.role }}</p>
+          <div class="account-guest">
+            <span class="account-label">Guest session</span>
+            <p class="account-email">Sign in to save your profile and leave scout reports.</p>
+            <button type="button" class="btn-primary" routerLink="/welcome">Sign in</button>
+          </div>
+        } @else if (mongoUser(); as user) {
+          <div class="account-verified">
+            <span class="account-label">Verified account</span>
+            <p class="account-email">{{ user.email }}</p>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-tile">
+              <span class="stat-value primary">—</span>
+              <span class="stat-label">Matches</span>
+            </div>
+            <div class="stat-tile">
+              <span class="stat-value secondary">—</span>
+              <span class="stat-label">Rating</span>
+            </div>
+            <div class="stat-tile">
+              <span class="stat-value tertiary">{{ reviewsCount() }}</span>
+              <span class="stat-label">Reviews</span>
+            </div>
+          </div>
+        } @else {
+          <div class="account-guest">
+            <span class="account-label">Syncing</span>
+            <p class="account-email">Loading your profile…</p>
+          </div>
         }
-      </div>
+      </article>
     </section>
 
-    <section class="profile-actions glass-card">
-      @if (isGuest()) {
-        <p class="hint">Sign in to rate players and leave scout reports.</p>
-        <ion-button expand="block" routerLink="/welcome">Sign in</ion-button>
-      } @else if (mongoUser()) {
-        <ion-button expand="block" color="danger" fill="outline" (click)="signOut()">Logout</ion-button>
-      } @else if (authService.firebaseUser) {
-        <ion-note color="warning">Syncing profile…</ion-note>
-      } @else {
-        <ion-button expand="block" routerLink="/welcome">Sign in</ion-button>
+    @if (!isGuest()) {
+      <section class="section-block">
+        <div class="section-head">
+          <h3 class="section-title">My Comments</h3>
+        </div>
+        @if (commentsLoading()) {
+          @for (i of [1, 2]; track i) {
+            <div class="comment-card glass-card skeleton">
+              <ion-skeleton-text animated style="width: 2.5rem; height: 2.5rem; border-radius: 0.5rem"></ion-skeleton-text>
+              <div class="comment-body">
+                <ion-skeleton-text animated style="width: 90%; height: 14px"></ion-skeleton-text>
+                <ion-skeleton-text animated style="width: 50%; height: 12px; margin-top: 8px"></ion-skeleton-text>
+              </div>
+            </div>
+          }
+        } @else if (!myComments().length) {
+          <div class="comments-empty glass-card">
+            <div class="comment-icon-wrap">
+              <ion-icon name="chatbubble-outline"></ion-icon>
+            </div>
+            <p class="comments-empty-text">
+              You have not left any scout reports yet. Visit a player profile to rate and comment.
+            </p>
+          </div>
+        } @else {
+          <div class="comment-list">
+            @for (c of myComments(); track c._id) {
+              <a class="comment-card glass-card" [routerLink]="['/player', c.player._id]">
+                <div class="comment-icon-wrap">
+                  <ion-icon name="chatbubble-outline"></ion-icon>
+                </div>
+                <div class="comment-body">
+                  <p class="comment-text">"{{ c.text }}"</p>
+                  <div class="comment-meta">
+                    <span>{{ playerLabel(c) }}</span>
+                    <span class="meta-dot"></span>
+                    <span>{{ formatRelativeTime(c.createdAt) }}</span>
+                  </div>
+                </div>
+              </a>
+            }
+          </div>
+        }
+      </section>
+
+      <section class="section-block">
+        <h3 class="section-title">Settings</h3>
+        <div class="glass-card settings-list">
+          @if (showAdminLink()) {
+            <button type="button" class="settings-row" routerLink="/tabs/admin">
+              <span class="settings-row-start">
+                <ion-icon name="server-outline"></ion-icon>
+                <span>Admin import</span>
+              </span>
+              <ion-icon name="chevron-forward-outline" class="settings-chevron"></ion-icon>
+            </button>
+          }
+          <button type="button" class="settings-row" disabled>
+            <span class="settings-row-start">
+              <ion-icon name="person-outline"></ion-icon>
+              <span>Account information</span>
+            </span>
+            <ion-icon name="chevron-forward-outline" class="settings-chevron"></ion-icon>
+          </button>
+          <button type="button" class="settings-row" disabled>
+            <span class="settings-row-start">
+              <ion-icon name="notifications-outline"></ion-icon>
+              <span>Notification preferences</span>
+            </span>
+            <ion-icon name="chevron-forward-outline" class="settings-chevron"></ion-icon>
+          </button>
+          <button type="button" class="settings-row" disabled>
+            <span class="settings-row-start">
+              <ion-icon name="shield-outline"></ion-icon>
+              <span>Privacy &amp; security</span>
+            </span>
+            <ion-icon name="chevron-forward-outline" class="settings-chevron"></ion-icon>
+          </button>
+          <button type="button" class="settings-row" disabled>
+            <span class="settings-row-start">
+              <ion-icon name="help-circle-outline"></ion-icon>
+              <span>Support center</span>
+            </span>
+            <ion-icon name="chevron-forward-outline" class="settings-chevron"></ion-icon>
+          </button>
+        </div>
+      </section>
+
+      @if (mongoUser()) {
+        <div class="logout-block">
+          <button type="button" class="btn-logout" (click)="signOut()">
+            <ion-icon name="log-out-outline"></ion-icon>
+            <span>Logout</span>
+          </button>
+        </div>
       }
-    </section>
-
-    @if (showAdminLink()) {
-      <ion-button expand="block" color="secondary" class="admin-link" routerLink="/tabs/admin">
-        Open admin import
-      </ion-button>
     }
 
-    <p class="version">FootyLocal · Made for the love of the game</p>
+    <p class="version">FootyLocal v0.0.1 · Made for the love of the game</p>
   </div>
 </ion-content>
