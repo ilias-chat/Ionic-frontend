@@ -5,102 +5,170 @@
   [showShareActions]="true"
 />
 
-<ion-content class="ion-padding detail">
+<ion-content class="player-detail">
   @if (loading()) {
-    <ion-card>
-      <ion-card-header>
-        <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-        <ion-skeleton-text animated style="width: 35%"></ion-skeleton-text>
-      </ion-card-header>
-    </ion-card>
-  } @else if (player()) {
-    @let p = player()!;
-    <ion-card class="fl-glass-card">
-      <ion-card-header>
-        <ion-card-title>{{ p.name }}</ion-card-title>
-        <ion-label class="muted">{{ p.team }} · {{ p.league }}</ion-label>
-      </ion-card-header>
-      <ion-card-content>
-        @if (p.position) {
-          <ion-chip color="primary">{{ p.position }}</ion-chip>
-        }
-        @if (p.venueName) {
-          <ion-chip color="tertiary">{{ p.venueName }}</ion-chip>
-        }
-      </ion-card-content>
-    </ion-card>
+    <section class="hero hero-skeleton">
+      <ion-skeleton-text animated style="width: 100%; height: 100%"></ion-skeleton-text>
+    </section>
+    <div class="page-inner">
+      <ion-skeleton-text animated style="width: 100%; height: 5rem; border-radius: 0.75rem"></ion-skeleton-text>
+    </div>
+  } @else if (player(); as p) {
+    <section class="hero">
+      <div class="hero-placeholder" [style.background]="placeholderGradient(p)">
+        <span class="hero-initials">{{ initials(p.name) }}</span>
+      </div>
+      <div class="hero-gradient"></div>
+      <div class="hero-content">
+        <span class="hero-eyebrow">{{ heroSubtitle(p) }}</span>
+        <h2 class="hero-name">{{ p.name }}</h2>
+        <div class="hero-badges">
+          <span class="badge badge-position">{{ positionLabel(p) }}</span>
+          @if (jerseyNumber(p); as num) {
+            <span class="badge badge-number">{{ num }}</span>
+          }
+        </div>
+      </div>
+    </section>
 
-    <ion-card class="fl-glass-card ion-margin-top">
-      <ion-card-header>
-        <ion-card-title>Stats</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        @if (!statsEntries.length) {
-          <ion-note>No stats stored for this player.</ion-note>
-        } @else {
-          <ion-list lines="full">
-            @for (row of statsEntries; track row[0]) {
-              <ion-item>
-                <ion-label>{{ row[0] }}</ion-label>
-                <ion-note slot="end">{{ row[1] }}</ion-note>
-              </ion-item>
-            }
-          </ion-list>
+    <div class="page-inner">
+      <section class="stats-grid">
+        @for (tile of statTiles(p); track tile.label) {
+          <article class="glass-card stat-tile" [class]="'accent-' + tile.accent">
+            <span class="stat-label">{{ tile.label }}</span>
+            <span class="stat-value">{{ tile.value }}</span>
+          </article>
         }
-      </ion-card-content>
-    </ion-card>
+      </section>
 
-    <ion-card class="fl-glass-card ion-margin-top">
-      <ion-card-header>
-        <ion-card-title>Comments</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        @if (!comments().length) {
-          <p class="muted">No comments yet.</p>
-        }
-        @for (c of comments(); track $index) {
-          <div class="comment-block">
-            <div class="comment-row">
-              <app-user-avatar size="md" [name]="c.author" [useIconFallback]="false" />
-              <div class="comment-body">
-                <div class="comment-meta">
-                  <span class="comment-author">{{ (c.author | slice:0:8) + '…' }}</span>
-                  <ion-chip size="small" color="secondary">{{ c.rating }}★</ion-chip>
-                </div>
-                <p>{{ c.text }}</p>
-              </div>
+      @if (p.venueName) {
+        <section class="section-block">
+          <h3 class="section-title">
+            <ion-icon name="football-outline"></ion-icon>
+            Home Stadium
+          </h3>
+          <article class="glass-card stadium-card">
+            <div class="stadium-map">
+              <div class="stadium-map-bg"></div>
+              <div class="stadium-map-tint"></div>
+              <ion-icon name="location-outline" class="stadium-pin"></ion-icon>
             </div>
+            <div class="stadium-footer">
+              <div>
+                <h4 class="stadium-name">{{ p.venueName }}</h4>
+                <p class="stadium-meta">{{ p.team }} · {{ p.league }}</p>
+              </div>
+              <button type="button" class="directions-btn" (click)="openDirections(p)">Directions</button>
+            </div>
+          </article>
+        </section>
+      }
+
+      <section class="section-block scout-section">
+        <div class="section-head">
+          <h3 class="section-title">
+            <ion-icon name="chatbubble-outline"></ion-icon>
+            Scout Reports
+          </h3>
+          <span class="review-count">{{ reviewCount() }} Reviews</span>
+        </div>
+
+        @if (!canComment()) {
+          <p class="comment-guest-hint">Sign in to leave a scout report.</p>
+        }
+        @if (!comments().length) {
+          <p class="empty-reviews">No scout reports yet. Be the first to share your take.</p>
+        } @else {
+          <div class="reviews-list">
+            @for (c of comments(); track $index) {
+              <article class="glass-card review-card" [class.review-featured]="commentAccent($index)">
+                <div class="review-top">
+                  <div class="review-author-row">
+                    <app-user-avatar size="md" [name]="commentAuthorLabel(c)" [useIconFallback]="false" />
+                    <div>
+                      <p class="review-author">{{ commentAuthorLabel(c) }}</p>
+                      <div class="review-stars">
+                        @for (filled of stars(c.rating); track $index) {
+                          <ion-icon [name]="filled ? 'star' : 'star-outline'"></ion-icon>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                  @if (formatRelativeTime(c.createdAt); as when) {
+                    <span class="review-time">{{ when }}</span>
+                  }
+                </div>
+                <p class="review-text">{{ c.text }}</p>
+              </article>
+            }
           </div>
         }
-      </ion-card-content>
-    </ion-card>
 
-    <ion-card class="fl-glass-card ion-margin-top">
-      <ion-card-header>
-        <ion-card-title>Your rating & comment</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        @if (!canComment()) {
-          <ion-note>Sign in (not as guest) to leave a rating and comment.</ion-note>
-        } @else {
-          <ion-label>Rating (1–5)</ion-label>
-          <ion-range min="1" max="5" step="1" snaps="true" ticks="true" [ngModel]="rating()" (ngModelChange)="rating.set($event)"></ion-range>
-          <ion-item lines="none" class="ion-no-padding">
-            <ion-input
-              label="Comment"
-              labelPlacement="stacked"
-              [ngModel]="commentText()"
-              (ngModelChange)="commentText.set($event)"
-              placeholder="Share your take…"
-            ></ion-input>
-          </ion-item>
-          <ion-button expand="block" class="ion-margin-top" [disabled]="posting() || !commentText().trim()" (click)="submitComment()">
-            Post with location
-          </ion-button>
-        }
-      </ion-card-content>
-    </ion-card>
+      </section>
+    </div>
+
+    @if (canComment() && !reviewModalOpen()) {
+      <button type="button" class="fab" aria-label="Add scout report" (click)="openReviewModal()">
+        <ion-icon name="add-outline"></ion-icon>
+      </button>
+    }
+
+    <ion-modal
+      class="review-sheet-modal"
+      [isOpen]="reviewModalOpen()"
+      (didDismiss)="closeReviewModal()"
+      [initialBreakpoint]="0.58"
+      [breakpoints]="[0, 0.58, 0.88]"
+      [handle]="false"
+    >
+      <ng-template>
+        <div class="review-sheet glass-panel">
+          <button type="button" class="sheet-handle" aria-label="Close" (click)="closeReviewModal()"></button>
+
+          <div class="sheet-header">
+            <p class="sheet-eyebrow">Scout Report</p>
+            <h2 class="sheet-title">{{ p.name }}</h2>
+            <p class="sheet-subtitle">{{ p.team }} · {{ p.league }}</p>
+          </div>
+
+          <label class="field-label">Your rating</label>
+          <div class="star-picker" role="group" aria-label="Rating">
+            @for (star of starOptions; track star) {
+              <button
+                type="button"
+                class="star-btn"
+                [attr.aria-label]="'Rate ' + star + ' stars'"
+                (click)="setRating(star)"
+              >
+                <ion-icon [name]="isStarFilled(star) ? 'star' : 'star-outline'"></ion-icon>
+              </button>
+            }
+          </div>
+
+          <label class="field-label" for="scout-report-text">Your report</label>
+          <textarea
+            id="scout-report-text"
+            class="review-textarea"
+            rows="5"
+            placeholder="Share your take on this player…"
+            [value]="commentText()"
+            (input)="onCommentInput($event)"
+          ></textarea>
+
+          <button
+            type="button"
+            class="submit-btn"
+            [disabled]="posting() || !commentText().trim()"
+            (click)="submitComment()"
+          >
+            {{ posting() ? 'Posting…' : 'Post with location' }}
+          </button>
+        </div>
+      </ng-template>
+    </ion-modal>
   } @else {
-    <p>Player not found.</p>
+    <div class="page-inner not-found">
+      <p>Player not found.</p>
+    </div>
   }
 </ion-content>

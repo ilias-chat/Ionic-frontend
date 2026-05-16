@@ -13,6 +13,7 @@ import { AppShellHeaderComponent } from '../../shared/components/app-shell-heade
 import { firstValueFrom } from 'rxjs';
 import { PlayerApiService } from '../../core/api/player-api.service';
 import { Player } from '../../shared/models/player.model';
+import { playerInitials, playerPlaceholderGradient } from '../../shared/utils/player-placeholder';
 
 interface PositionOption {
   label: string;
@@ -24,17 +25,6 @@ const POSITIONS: PositionOption[] = [
   { label: 'Midfielders', value: 'Midfielder' },
   { label: 'Defenders', value: 'Defender' },
   { label: 'Goalkeepers', value: 'Goalkeeper' },
-];
-
-/** Stable pastel-on-dark gradient per player so the placeholder feels distinct. */
-const GRADIENTS = [
-  ['#1e293b', '#0b1326'],
-  ['#312e81', '#0b1326'],
-  ['#134e4a', '#0b1326'],
-  ['#7c2d12', '#0b1326'],
-  ['#581c87', '#0b1326'],
-  ['#0c4a6e', '#0b1326'],
-  ['#365314', '#0b1326'],
 ];
 
 @Component({
@@ -145,22 +135,8 @@ export class DiscoveryPage implements OnInit {
 
   /* ===================== UI helpers ===================== */
 
-  initials(name: string): string {
-    if (!name) return '?';
-    const parts = name.trim().split(/\s+/);
-    const first = parts[0]?.[0] ?? '';
-    const last = parts.length > 1 ? parts[parts.length - 1][0] : '';
-    return (first + last).toUpperCase();
-  }
-
-  /** Pick a stable gradient per player based on a simple hash of the id. */
-  placeholderGradient(p: Player): string {
-    const seed = (p._id || p.name || '')
-      .split('')
-      .reduce((acc, ch) => (acc + ch.charCodeAt(0)) % 1000, 0);
-    const [a, b] = GRADIENTS[seed % GRADIENTS.length];
-    return `linear-gradient(135deg, ${a} 0%, ${b} 100%)`;
-  }
+  initials = playerInitials;
+  placeholderGradient = playerPlaceholderGradient;
 
   positionBadge(p: Player): string | null {
     const pos = (p.position || '').toLowerCase();

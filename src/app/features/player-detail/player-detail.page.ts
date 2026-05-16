@@ -1,56 +1,48 @@
-import { SlicePipe } from '@angular/common';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 import { Auth } from '@angular/fire/auth';
 import {
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonChip,
   IonContent,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonNote,
-  IonRange,
+  IonIcon,
+  IonModal,
   IonSkeletonText,
 } from '@ionic/angular/standalone';
-import { AppShellHeaderComponent } from '../../shared/components/app-shell-header/app-shell-header.component';
-import { UserAvatarComponent } from '../../shared/components/user-avatar/user-avatar.component';
+import { addIcons } from 'ionicons';
+import {
+  addOutline,
+  chatbubbleOutline,
+  locationOutline,
+  star,
+  starOutline,
+  footballOutline,
+} from 'ionicons/icons';
 import { ToastController } from '@ionic/angular';
 import { firstValueFrom } from 'rxjs';
+import { AppShellHeaderComponent } from '../../shared/components/app-shell-header/app-shell-header.component';
+import { UserAvatarComponent } from '../../shared/components/user-avatar/user-avatar.component';
 import { PlayerApiService } from '../../core/api/player-api.service';
 import { GeoLocateService } from '../../core/geo/geo-locate.service';
 import { GuestSessionService } from '../../core/session/guest-session.service';
 import { PlayerComment } from '../../shared/models/comment.model';
 import { Player, PlayerStats } from '../../shared/models/player.model';
+import { playerInitials, playerPlaceholderGradient } from '../../shared/utils/player-placeholder';
+
+interface StatTile {
+  label: string;
+  value: string;
+  accent: 'primary' | 'surface' | 'secondary' | 'error';
+}
 
 @Component({
   selector: 'app-player-detail',
   templateUrl: './player-detail.page.html',
   styleUrls: ['./player-detail.page.scss'],
   imports: [
-    FormsModule,
-    SlicePipe,
     AppShellHeaderComponent,
     UserAvatarComponent,
     IonContent,
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardContent,
-    IonList,
-    IonItem,
-    IonLabel,
-    IonChip,
-    IonNote,
-    IonInput,
-    IonButton,
-    IonRange,
+    IonIcon,
+    IonModal,
     IonSkeletonText,
   ],
 })
@@ -68,15 +60,23 @@ export class PlayerDetailPage implements OnInit {
   readonly commentText = signal('');
   readonly rating = signal(5);
   readonly posting = signal(false);
+  readonly reviewModalOpen = signal(false);
+
+  readonly starOptions = [1, 2, 3, 4, 5] as const;
 
   playerId = '';
 
-  get statsEntries(): [string, string | number | boolean | null | undefined][] {
-    const s = this.player()?.stats as PlayerStats | undefined;
-    if (!s || typeof s !== 'object') {
-      return [];
-    }
-    return Object.entries(s).filter(([, v]) => v !== undefined && v !== null && v !== '');
+  readonly reviewCount = computed(() => this.comments().length);
+
+  constructor() {
+    addIcons({
+      addOutline,
+      footballOutline,
+      chatbubbleOutline,
+      locationOutline,
+      star,
+      starOutline,
+    });
   }
 
   ngOnInit(): void {
@@ -86,6 +86,7 @@ export class PlayerDetailPage implements OnInit {
 
   async load(): Promise<void> {
     if (!this.playerId) {
+      this.loading.set(false);
       return;
     }
     this.loading.set(true);
@@ -101,8 +102,147 @@ export class PlayerDetailPage implements OnInit {
     }
   }
 
+  statTiles(p: Player): StatTile[] {
+    return [
+      {
+        label: 'Goals',
+        value: this.formatStat(this.pickStat(p.stats, [['goals', 'total'], ['goals'], ['Goals']])),
+        accent: 'primary',
+      },
+      {
+        label: 'Apps',
+        value: this.formatStat(
+          this.pickStat(p.stats, [
+            ['games', 'appearences'],
+            ['games', 'appearances'],
+            ['appearances'],
+            ['Apps'],
+          ])
+        ),
+        accent: 'surface',
+      },
+      {
+        label: 'Yellows',
+        value: this.formatStat(
+          this.pickStat(p.stats, [['cards', 'yellow'], ['yellowCards'], ['Yellows']])
+        ),
+        accent: 'secondary',
+      },
+      {
+        label: 'Reds',
+        value: this.formatStat(this.pickStat(p.stats, [['cards', 'red'], ['redCards'], ['Reds']])),
+        accent: 'error',
+      },
+    ];
+  }
+
+  heroSubtitle(p: Player): string {
+    const pos = p.position?.trim();
+    if (pos) {
+      return pos;
+    }
+    return p.league || p.team || 'Professional';
+  }
+
+  positionLabel(p: Player): string {
+    return (p.position || 'Player').toUpperCase();
+  }
+
+  jerseyNumber(p: Player): string | null {
+    const n = this.pickStat(p.stats, [['number'], ['jersey'], ['shirt']]);
+    if (n === null || n === undefined) {
+      return null;
+    }
+    const s = String(n).trim();
+    return s ? `#${s.replace(/^#/, '')}` : null;
+  }
+
+  readonly initials = playerInitials;
+  readonly placeholderGradient = playerPlaceholderGradient;
+
+  stars(rating: number): boolean[] {
+    const rounded = Math.max(1, Math.min(5, Math.round(rating)));
+    return [1, 2, 3, 4, 5].map((i) => i <= rounded);
+  }
+
+  commentAccent(index: number): boolean {
+    return index === 0;
+  }
+
+  formatRelativeTime(createdAt?: string): string {
+    if (!createdAt) {
+      return '';
+    }
+    const then = new Date(createdAt).getTime();
+    if (Number.isNaN(then)) {
+      return '';
+    }
+    const diffMs = Date.now() - then;
+    const mins = Math.floor(diffMs / 60000);
+    if (mins < 60) {
+      return mins <= 1 ? 'Just now' : `${mins}m ago`;
+    }
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) {
+      return `${hours}h ago`;
+    }
+    const days = Math.floor(hours / 24);
+    if (days < 7) {
+      return `${days}d ago`;
+    }
+    const weeks = Math.floor(days / 7);
+    return `${weeks}w ago`;
+  }
+
   canComment(): boolean {
     return !!this.auth.currentUser && !this.guestSession.isGuest();
+  }
+
+  openDirections(p: Player): void {
+    const coords = p.location?.coordinates;
+    if (!coords || coords.length !== 2) {
+      return;
+    }
+    const [lng, lat] = coords;
+    const q = encodeURIComponent(p.venueName || p.team || 'Stadium');
+    window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}(${q})`, '_blank');
+  }
+
+  openReviewModal(): void {
+    if (!this.canComment()) {
+      return;
+    }
+    this.reviewModalOpen.set(true);
+  }
+
+  closeReviewModal(): void {
+    this.reviewModalOpen.set(false);
+  }
+
+  setRating(value: number): void {
+    this.rating.set(Math.max(1, Math.min(5, value)));
+  }
+
+  isStarFilled(star: number): boolean {
+    return star <= this.rating();
+  }
+
+  /** Prefer stored display name; legacy comments only have Firebase UID in author. */
+  commentAuthorLabel(c: PlayerComment): string {
+    const name = c.authorName?.trim();
+    if (name) {
+      return name;
+    }
+    const raw = c.author?.trim() ?? '';
+    if (!raw || raw.length > 24) {
+      return 'Fan';
+    }
+    return raw;
+  }
+
+  onCommentInput(event: Event): void {
+    const el = event.target as HTMLTextAreaElement;
+    this.commentText.set(el.value);
   }
 
   async submitComment(): Promise<void> {
@@ -124,13 +264,15 @@ export class PlayerDetailPage implements OnInit {
           lng,
         })
       );
-      this.comments.update((list) => [...list, created]);
+      this.comments.update((list) => [created, ...list]);
       this.commentText.set('');
-      const t = await this.toast.create({ message: 'Comment posted', duration: 1600, color: 'success' });
+      this.rating.set(5);
+      this.closeReviewModal();
+      const t = await this.toast.create({ message: 'Scout report posted', duration: 1600, color: 'success' });
       await t.present();
     } catch {
       const t = await this.toast.create({
-        message: 'Could not post comment. Check GPS permission and sign-in.',
+        message: 'Could not post report. Check GPS permission and sign-in.',
         duration: 2600,
         color: 'danger',
       });
@@ -138,5 +280,33 @@ export class PlayerDetailPage implements OnInit {
     } finally {
       this.posting.set(false);
     }
+  }
+
+  private formatStat(value: string | number | null): string {
+    if (value === null || value === undefined || value === '') {
+      return '—';
+    }
+    return String(value);
+  }
+
+  private pickStat(stats: PlayerStats | undefined, paths: string[][]): string | number | null {
+    if (!stats) {
+      return null;
+    }
+    for (const path of paths) {
+      let cur: unknown = stats;
+      for (const key of path) {
+        if (cur && typeof cur === 'object' && key in (cur as Record<string, unknown>)) {
+          cur = (cur as Record<string, unknown>)[key];
+        } else {
+          cur = undefined;
+          break;
+        }
+      }
+      if (cur !== undefined && cur !== null && cur !== '' && typeof cur !== 'object') {
+        return cur as string | number;
+      }
+    }
+    return null;
   }
 }
