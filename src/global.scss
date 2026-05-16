@@ -42,7 +42,19 @@ body {
   background-color: var(--fl-background);
 }
 
+/* Inactive tab pages stay in the DOM — stop them capturing taps/clicks */
+.ion-page-hidden {
+  pointer-events: none !important;
+}
+
 /* Leaflet panes above Ionic fixed layers where needed */
 .leaflet-container {
   font-family: inherit;
+}
+
+/* When the map tab is cached off-screen, never let Leaflet intercept touches */
+.ion-page-hidden .leaflet-host,
+.ion-page-hidden .leaflet-container {
+  pointer-events: none !important;
+  visibility: hidden;
 }

@@ -2,12 +2,73 @@
   --background: var(--fl-background);
 }
 
-.fl-glass-card {
-  border-radius: var(--fl-radius-lg);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(23, 31, 51, 0.9);
+.page-inner {
+  padding: 1.25rem;
+  padding-bottom: 6rem;
+  max-width: 40rem;
+  margin: 0 auto;
 }
 
-ion-item {
-  --background: transparent;
+.glass-card {
+  background: rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+}
+
+.profile-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.avatar-wrap {
+  margin-bottom: 1rem;
+}
+
+.profile-name {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--fl-on-surface);
+}
+
+.profile-sub {
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+  color: var(--fl-on-surface-variant);
+}
+
+.profile-role {
+  margin: 0.5rem 0 0;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--fl-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.profile-actions {
+  padding: 1.25rem;
+
+  .hint {
+    margin: 0 0 1rem;
+    color: var(--fl-on-surface-variant);
+    font-size: 0.875rem;
+  }
+}
+
+.admin-link {
+  margin-top: 1rem;
+}
+
+.version {
+  margin-top: 2rem;
+  text-align: center;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: rgba(188, 203, 185, 0.4);
 }

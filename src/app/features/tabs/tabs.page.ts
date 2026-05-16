@@ -1,20 +1,20 @@
 import { Component, OnInit, computed, inject } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
-import {
-  IonIcon,
-  IonLabel,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-} from '@ionic/angular/standalone';
+import { IonIcon, IonLabel, IonTabBar, IonTabButton, IonTabs } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { compassOutline, footballOutline, personCircleOutline, shieldCheckmarkOutline } from 'ionicons/icons';
+import {
+  listOutline,
+  locationOutline,
+  personOutline,
+  shieldCheckmarkOutline,
+} from 'ionicons/icons';
 import { AuthService } from '../../core/auth/auth.service';
 import { GuestSessionService } from '../../core/session/guest-session.service';
 
 @Component({
   selector: 'app-tabs',
   templateUrl: './tabs.page.html',
+  styleUrls: ['./tabs.page.scss'],
   imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel],
 })
 export class TabsPage implements OnInit {
@@ -27,7 +27,7 @@ export class TabsPage implements OnInit {
   );
 
   constructor() {
-    addIcons({ footballOutline, compassOutline, personCircleOutline, shieldCheckmarkOutline });
+    addIcons({ listOutline, locationOutline, personOutline, shieldCheckmarkOutline });
   }
 
   ngOnInit(): void {

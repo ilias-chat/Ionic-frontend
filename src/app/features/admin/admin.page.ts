@@ -1,5 +1,6 @@
 import { JsonPipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
+import { Auth } from '@angular/fire/auth';
 import { FormsModule } from '@angular/forms';
 import {
   IonButton,
@@ -8,15 +9,14 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonContent,
-  IonHeader,
   IonInput,
   IonItem,
   IonNote,
-  IonTitle,
-  IonToolbar,
 } from '@ionic/angular/standalone';
+import { AppShellHeaderComponent } from '../../shared/components/app-shell-header/app-shell-header.component';
 import { ToastController } from '@ionic/angular';
 import { firstValueFrom } from 'rxjs';
+import { AuthService } from '../../core/auth/auth.service';
 import { PlayerApiService } from '../../core/api/player-api.service';
 import { ImportPlayersResponse } from '../../shared/models/user.model';
 
@@ -26,9 +26,7 @@ import { ImportPlayersResponse } from '../../shared/models/user.model';
   styleUrls: ['./admin.page.scss'],
   imports: [
     FormsModule,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
+    AppShellHeaderComponent,
     IonContent,
     IonCard,
     IonCardHeader,
@@ -43,7 +41,15 @@ import { ImportPlayersResponse } from '../../shared/models/user.model';
 })
 export class AdminPage {
   private readonly api = inject(PlayerApiService);
+  private readonly auth = inject(Auth);
+  private readonly authService = inject(AuthService);
   private readonly toast = inject(ToastController);
+
+  ionViewWillEnter(): void {
+    if (this.auth.currentUser) {
+      void this.authService.refreshMongoUser();
+    }
+  }
 
   leagueIdStr = '';
   teamIdStr = '';

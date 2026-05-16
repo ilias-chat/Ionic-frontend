@@ -1,0 +1,95 @@
+:host {
+  display: inline-block;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+/* Placeholder shells (icon / initials) */
+.avatar-shell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Photos — block + explicit box so size never leaks between sm/lg instances */
+.avatar-photo {
+  display: block;
+  border-radius: 50%;
+  object-fit: cover;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.avatar-sm.avatar-photo,
+.avatar-sm.avatar-shell {
+  width: 2rem;
+  height: 2rem;
+  min-width: 2rem;
+  min-height: 2rem;
+}
+
+.avatar-sm.avatar-photo {
+  border: 1px solid rgba(75, 226, 119, 0.3);
+}
+
+.avatar-sm.avatar-shell.avatar-icon {
+  background: rgba(75, 226, 119, 0.2);
+  border: 1px solid rgba(75, 226, 119, 0.3);
+
+  ion-icon {
+    font-size: 1.125rem;
+    color: var(--fl-primary);
+  }
+}
+
+.avatar-sm.avatar-shell.avatar-initials {
+  background: rgba(75, 226, 119, 0.2);
+  border: 1px solid rgba(75, 226, 119, 0.3);
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.65rem;
+  color: var(--fl-primary);
+}
+
+.avatar-md.avatar-photo,
+.avatar-md.avatar-shell {
+  width: 2.5rem;
+  height: 2.5rem;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+}
+
+.avatar-md.avatar-shell {
+  background: var(--fl-surface-container-high, #222a3d);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--fl-primary);
+}
+
+.avatar-lg.avatar-photo,
+.avatar-lg.avatar-shell {
+  width: 6rem;
+  height: 6rem;
+  min-width: 6rem;
+  min-height: 6rem;
+}
+
+.avatar-lg.avatar-photo {
+  border: 2px solid var(--fl-primary);
+  box-shadow: 0 10px 25px rgba(75, 226, 119, 0.2);
+}
+
+.avatar-lg.avatar-shell.avatar-initials {
+  background: linear-gradient(135deg, #1e293b 0%, #131b2e 100%);
+  border: 2px solid var(--fl-primary);
+  box-shadow: 0 10px 25px rgba(75, 226, 119, 0.2);
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--fl-on-surface);
+}

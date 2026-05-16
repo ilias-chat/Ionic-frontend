@@ -6,15 +6,8 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import {
-  IonButton,
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonSpinner,
-  IonTitle,
-  IonToolbar,
-} from '@ionic/angular/standalone';
+import { IonContent, IonSpinner } from '@ionic/angular/standalone';
+import { AppShellHeaderComponent } from '../../shared/components/app-shell-header/app-shell-header.component';
 import * as L from 'leaflet';
 import { Subject, Subscription, debounceTime, switchMap } from 'rxjs';
 import { PlayerApiService } from '../../core/api/player-api.service';
@@ -29,7 +22,7 @@ const RADIUS_KM = 150;
   selector: 'app-map',
   templateUrl: './map.page.html',
   styleUrls: ['./map.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonSpinner, IonButton, IonButtons],
+  imports: [AppShellHeaderComponent, IonContent, IonSpinner],
 })
 export class MapPage implements OnDestroy {
   private readonly api = inject(PlayerApiService);

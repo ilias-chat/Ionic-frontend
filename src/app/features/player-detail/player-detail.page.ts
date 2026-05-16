@@ -4,16 +4,13 @@ import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Auth } from '@angular/fire/auth';
 import {
-  IonBackButton,
   IonButton,
-  IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
   IonCardTitle,
   IonChip,
   IonContent,
-  IonHeader,
   IonInput,
   IonItem,
   IonLabel,
@@ -21,9 +18,9 @@ import {
   IonNote,
   IonRange,
   IonSkeletonText,
-  IonTitle,
-  IonToolbar,
 } from '@ionic/angular/standalone';
+import { AppShellHeaderComponent } from '../../shared/components/app-shell-header/app-shell-header.component';
+import { UserAvatarComponent } from '../../shared/components/user-avatar/user-avatar.component';
 import { ToastController } from '@ionic/angular';
 import { firstValueFrom } from 'rxjs';
 import { PlayerApiService } from '../../core/api/player-api.service';
@@ -39,11 +36,8 @@ import { Player, PlayerStats } from '../../shared/models/player.model';
   imports: [
     FormsModule,
     SlicePipe,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonButtons,
-    IonBackButton,
+    AppShellHeaderComponent,
+    UserAvatarComponent,
     IonContent,
     IonCard,
     IonCardHeader,

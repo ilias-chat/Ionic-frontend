@@ -1,10 +1,19 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import { Auth, User, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
+import {
+  Auth,
+  User,
+  authState,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+} from '@angular/fire/auth';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { MongoUser } from '../../shared/models/user.model';
+import { resolveAvatarUrl } from '../../shared/utils/avatar.util';
 import { GuestSessionService } from '../session/guest-session.service';
 
 @Injectable({ providedIn: 'root' })
@@ -15,6 +24,15 @@ export class AuthService {
   private readonly guestSession = inject(GuestSessionService);
 
   readonly mongoUser = signal<MongoUser | null>(null);
+
+  private readonly authUser = toSignal(authState(this.auth), { initialValue: null });
+
+  /** Single source for profile/header photos (Mongo avatar, else Firebase photoURL). */
+  readonly profilePhotoUrl = computed(() => {
+    const mongo = this.mongoUser();
+    const fb = this.authUser();
+    return resolveAvatarUrl(mongo?.avatar, fb?.photoURL ?? null);
+  });
 
   get firebaseUser(): User | null {
     return this.auth.currentUser;

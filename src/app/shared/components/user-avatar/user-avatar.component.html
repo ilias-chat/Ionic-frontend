@@ -1,0 +1,16 @@
+@if (showPhoto(); as url) {
+  <img
+    class="avatar-photo avatar-{{ size() }}"
+    [src]="url"
+    alt=""
+    referrerpolicy="no-referrer"
+    decoding="async"
+    (error)="onImageError()"
+  />
+} @else if (size() === 'sm' && useIconFallback()) {
+  <span class="avatar-shell avatar-{{ size() }} avatar-icon" aria-hidden="true">
+    <ion-icon name="person-outline"></ion-icon>
+  </span>
+} @else {
+  <span class="avatar-shell avatar-{{ size() }} avatar-initials" aria-hidden="true">{{ initials() }}</span>
+}

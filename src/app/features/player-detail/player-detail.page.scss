@@ -24,9 +24,27 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+.comment-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.comment-body {
+  flex: 1;
+  min-width: 0;
+}
+
 .comment-meta {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.25rem;
+}
+
+.comment-author {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--fl-on-surface);
 }

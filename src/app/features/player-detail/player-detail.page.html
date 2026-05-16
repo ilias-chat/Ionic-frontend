@@ -1,11 +1,9 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/discovery"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Player</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-shell-header
+  layout="brand"
+  [showBack]="true"
+  backHref="/tabs/discovery"
+  [showShareActions]="true"
+/>
 
 <ion-content class="ion-padding detail">
   @if (loading()) {
@@ -62,11 +60,16 @@
         }
         @for (c of comments(); track $index) {
           <div class="comment-block">
-            <div class="comment-meta">
-              <span class="mono">{{ (c.author | slice:0:8) + '…' }}</span>
-              <ion-chip size="small" color="secondary">{{ c.rating }}★</ion-chip>
+            <div class="comment-row">
+              <app-user-avatar size="md" [name]="c.author" [useIconFallback]="false" />
+              <div class="comment-body">
+                <div class="comment-meta">
+                  <span class="comment-author">{{ (c.author | slice:0:8) + '…' }}</span>
+                  <ion-chip size="small" color="secondary">{{ c.rating }}★</ion-chip>
+                </div>
+                <p>{{ c.text }}</p>
+              </div>
             </div>
-            <p>{{ c.text }}</p>
           </div>
         }
       </ion-card-content>

@@ -1,11 +1,4 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Map</ion-title>
-    <ion-buttons slot="end">
-      <ion-button fill="clear" (click)="recenter()">Reset</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<app-shell-header layout="brand" [showSearch]="true" />
 
 <ion-content scroll-y="false" class="map-page">
   <div #mapHost class="leaflet-host"></div>

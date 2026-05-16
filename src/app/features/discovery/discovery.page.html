@@ -1,78 +1,111 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Discover</ion-title>
-    <ion-buttons slot="end">
-      <ion-button fill="clear" (click)="refresh()" [disabled]="loading()">
-        <ion-icon name="refresh-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<app-shell-header layout="brand" [showNotifications]="true" [showAvatar]="true" />
 
-<ion-content class="ion-padding discovery">
-  <ion-segment [value]="searchScope()" (ionChange)="onScopeChange($event)">
-    <ion-segment-button value="team">
-      <ion-label>Team</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="player">
-      <ion-label>Player name</ion-label>
-    </ion-segment-button>
-  </ion-segment>
+<ion-content class="discovery">
+  <div class="page-inner">
 
-  <ion-searchbar
-    class="ion-margin-top"
-    [placeholder]="searchScope() === 'team' ? 'Search by team name' : 'Search by player name'"
-    [debounce]="450"
-    (ionChange)="onSearchChange($event)"
-  ></ion-searchbar>
+    <!-- Search -->
+    <div class="search-wrap">
+      <ion-icon name="search-outline" class="search-icon"></ion-icon>
+      <input
+        class="search-input"
+        type="text"
+        placeholder="Search players or teams..."
+        [value]="searchText()"
+        (input)="onSearchInput($event)"
+      />
+    </div>
 
-  <div class="chips-row ion-margin-top">
-    @for (pos of positions; track pos) {
-      <ion-chip [color]="selectedPosition() === pos ? 'primary' : 'medium'" (click)="togglePosition(pos)">
-        <ion-label>{{ pos }}</ion-label>
-      </ion-chip>
+    <!-- Filter chips -->
+    <div class="filter-chips">
+      <button
+        class="filter-chip"
+        [class.active]="!selectedPosition()"
+        (click)="selectPosition(null)"
+      >All</button>
+      @for (pos of positions; track pos.value) {
+        <button
+          class="filter-chip"
+          [class.active]="selectedPosition() === pos.value"
+          (click)="selectPosition(pos.value)"
+        >{{ pos.label }}</button>
+      }
+    </div>
+
+    <!-- Cards / states -->
+    @if (initialLoading()) {
+      <div class="card-list">
+        @for (i of [1, 2, 3, 4]; track i) {
+          <article class="player-card skeleton">
+            <div class="player-card-image">
+              <ion-skeleton-text animated style="width: 100%; height: 100%"></ion-skeleton-text>
+            </div>
+            <div class="player-card-body">
+              <ion-skeleton-text animated style="width: 60%; height: 22px"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 40%; height: 14px; margin-top: 8px"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 50%; height: 14px; margin-top: 12px"></ion-skeleton-text>
+            </div>
+          </article>
+        }
+      </div>
+    } @else if (!players().length) {
+      <div class="empty-state">
+        <ion-icon name="search-outline"></ion-icon>
+        <p>No players match your filters.</p>
+      </div>
+    } @else {
+      <div class="card-list">
+        @for (p of players(); track p._id) {
+          <article class="player-card" [routerLink]="['/player', p._id]">
+            <div
+              class="player-card-image"
+              [style.background]="placeholderGradient(p)"
+            >
+              <span class="player-initials">{{ initials(p.name) }}</span>
+              @if (positionBadge(p); as badge) {
+                <span class="position-badge" [class]="'pos-' + badge.toLowerCase()">{{ badge }}</span>
+              }
+            </div>
+            <div class="player-card-body">
+              <div class="row top">
+                <div class="meta">
+                  <h3 class="player-name">{{ p.name }}</h3>
+                  <div class="team-row">
+                    <ion-icon name="shield-outline" class="shield-icon"></ion-icon>
+                    <span class="team-name">{{ p.team }}</span>
+                  </div>
+                </div>
+                <button type="button" class="fav-btn" (click)="$event.stopPropagation()">
+                  <ion-icon name="heart-outline"></ion-icon>
+                </button>
+              </div>
+
+              <div class="rating-row">
+                @for (s of stars(p); track $index) {
+                  <ion-icon [name]="s ? 'star' : 'star-outline'" class="star"></ion-icon>
+                }
+                <span class="rating-text">{{ ratingLabel(p) }}</span>
+              </div>
+
+              <div class="tag-row">
+                @if (p.position) {
+                  <span class="tag tag-primary">{{ p.position }}</span>
+                }
+                @if (p.venueName) {
+                  <span class="tag tag-tertiary">{{ p.venueName }}</span>
+                }
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+
+      @if (hasMore()) {
+        <div class="load-more">
+          <button class="load-more-btn" [disabled]="loading()" (click)="loadMoreManual()">
+            {{ loading() ? 'Loading…' : 'Load More' }}
+          </button>
+        </div>
+      }
     }
   </div>
-
-  @if (searchScope() === 'player' && !searchText().trim()) {
-    <p class="hint ion-text-center ion-margin-top">Enter a name to search players.</p>
-  }
-
-  @if (initialLoading()) {
-    @for (i of [1, 2, 3, 4, 5]; track i) {
-      <ion-card class="fl-player-card">
-        <ion-card-header>
-          <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
-          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-        </ion-card-header>
-      </ion-card>
-    }
-  } @else if (!players().length) {
-    <div class="empty ion-text-center ion-padding">
-      <p>No players match your filters.</p>
-    </div>
-  } @else {
-    @for (p of players(); track p._id) {
-      <ion-card class="fl-player-card" [routerLink]="['/player', p._id]">
-        <ion-card-header>
-          <ion-card-title>{{ p.name }}</ion-card-title>
-          <ion-card-subtitle>{{ p.team }}</ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-header>
-          <ion-badge color="tertiary">{{ p.venueName || 'Stadium TBC' }}</ion-badge>
-          @if (p.position) {
-            <ion-chip outline="true" class="ion-margin-start">
-              <ion-icon name="person-outline"></ion-icon>
-              <ion-label>{{ p.position }}</ion-label>
-            </ion-chip>
-          }
-        </ion-card-header>
-      </ion-card>
-    }
-    @if (hasMore()) {
-      <ion-button expand="block" fill="outline" class="ion-margin-top" [disabled]="loading()" (click)="loadMoreManual()">
-        Load more
-      </ion-button>
-    }
-  }
 </ion-content>

@@ -1,0 +1,36 @@
+.fl-tab-bar {
+  --background: rgba(23, 31, 51, 0.9);
+  --border: 1px solid rgba(255, 255, 255, 0.05);
+  height: 5rem;
+  padding-top: 0.25rem;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  border-radius: 0.75rem 0.75rem 0 0;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+
+  ion-tab-button {
+    --color: rgba(188, 203, 185, 0.7);
+    --color-selected: var(--fl-primary);
+    max-width: none;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: color 0.15s ease, transform 0.15s ease;
+
+    ion-icon {
+      font-size: 1.5rem;
+    }
+
+    ion-label {
+      margin-top: 0.15rem;
+    }
+
+    &.tab-selected {
+      font-weight: 700;
+
+      ion-icon {
+        font-variation-settings: normal;
+      }
+    }
+  }
+}
